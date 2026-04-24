@@ -1,0 +1,1833 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site de Estudos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+
+        * {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0d0d0d;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .logo {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 28px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 8px 15px;
+        }
+
+        .search-bar input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: white;
+            padding: 5px;
+            width: 200px;
+        }
+
+        .search-bar input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .search-bar i {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 70px;
+            width: 250px;
+            height: calc(100vh - 70px);
+            background: transparent;
+            box-shadow: none;
+            padding: 20px 0;
+            overflow-y: auto;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            gap: 15px;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 0 25px 25px 0;
+            margin-right: 15px;
+        }
+
+        .sidebar-menu a i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .menu-section {
+            padding: 0 25px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hidden-subjects {
+            display: none;
+        }
+
+        .show-more-btn {
+            margin: 10px 25px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .show-more-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Calendar Modal */
+        .calendar-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .calendar-modal-overlay.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .calendar-modal {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 25px;
+            padding: 40px;
+            max-width: 900px;
+            width: 95%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: scaleIn 0.3s ease;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .calendar-title {
+            color: white;
+            font-size: 32px;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: 700;
+        }
+
+        .calendar-close {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .calendar-close:hover {
+            background: rgba(255, 107, 107, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .calendar-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-nav-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .calendar-nav-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .calendar-month-year {
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .calendar-day-header {
+            color: #feca57;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .calendar-day {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 10px;
+            min-height: 80px;
+            color: #e0e0e0;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .calendar-day:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #feca57;
+        }
+
+        .calendar-day.today {
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            color: white;
+            font-weight: 600;
+        }
+
+        .calendar-day-number {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .calendar-event {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-size: 11px;
+            margin-top: 3px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .calendar-event.arte { background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); }
+        .calendar-event.biologia { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .calendar-event.educacao-fisica { background: linear-gradient(135deg, #96fbc4 0%, #f9f586 100%); }
+        .calendar-event.fisica { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .calendar-event.filosofia { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+        .calendar-event.geografia { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .calendar-event.historia { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); }
+        .calendar-event.ingles { background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); }
+        .calendar-event.portugues { background: linear-gradient(135deg, #c3cfe2 0%, #c3cfe2 100%); }
+        .calendar-event.matematica { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .calendar-event.quimica { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .calendar-event.sociologia { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .calendar-event.geral { background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%); }
+
+        /* Tooltip for calendar events */
+        .calendar-event-wrapper {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .calendar-event-wrapper:hover .event-tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .event-tooltip {
+            visibility: hidden;
+            width: 200px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            text-align: left;
+            border-radius: 10px;
+            padding: 12px;
+            position: absolute;
+            z-index: 1000;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-bottom: 8px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .event-tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 6px;
+            border-style: solid;
+            border-color: #1a1a2e transparent transparent transparent;
+        }
+
+        .event-tooltip strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #feca57;
+            font-size: 13px;
+        }
+
+        .event-tooltip .tooltip-time {
+            color: #e0e0e0;
+            font-size: 11px;
+            margin-bottom: 5px;
+        }
+
+        .event-tooltip .tooltip-desc {
+            color: #e0e0e0;
+            font-size: 11px;
+            word-wrap: break-word;
+        }
+
+        /* Add Event Modal */
+        .add-event-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .add-event-modal-overlay.active {
+            display: flex;
+        }
+
+        .add-event-modal {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 25px;
+            padding: 40px;
+            max-width: 500px;
+            width: 95%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: scaleIn 0.3s ease;
+        }
+
+        .add-event-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .add-event-title {
+            color: white;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .add-event-close {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .add-event-close:hover {
+            background: rgba(255, 107, 107, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .add-event-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            color: #e0e0e0;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 15px;
+            color: white;
+            font-size: 15px;
+            font-family: 'Segoe UI', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #feca57;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .form-group select option {
+            background: #1a1a2e;
+            color: white;
+        }
+
+        .add-event-btn {
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .add-event-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        /* View Events Modal */
+        .view-events-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .view-events-modal-overlay.active {
+            display: flex;
+        }
+
+        .view-events-modal {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 25px;
+            padding: 40px;
+            max-width: 600px;
+            width: 95%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: scaleIn 0.3s ease;
+        }
+
+        .view-events-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .view-events-title {
+            color: white;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .view-events-close {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .view-events-close:hover {
+            background: rgba(255, 107, 107, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .view-events-date {
+            color: #feca57;
+            font-size: 18px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .view-event-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .view-event-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .view-event-checkbox {
+            width: 20px;
+            height: 20px;
+            margin-top: 5px;
+            cursor: pointer;
+            accent-color: #feca57;
+        }
+
+        .view-event-content {
+            flex: 1;
+        }
+
+        .view-event-title {
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .view-event-time {
+            color: #e0e0e0;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .view-event-description {
+            color: #e0e0e0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Context Menu */
+        .context-menu {
+            position: fixed;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 10px 0;
+            min-width: 200px;
+            z-index: 4000;
+            display: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .context-menu.active {
+            display: block;
+        }
+
+        .context-menu-item {
+            padding: 12px 20px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .context-menu-item:hover {
+            background: rgba(255, 107, 107, 0.2);
+        }
+
+        .context-menu-item.danger:hover {
+            background: rgba(255, 107, 107, 0.4);
+        }
+
+        /* Delete Confirmation Modal */
+        .delete-confirm-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 5000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .delete-confirm-modal-overlay.active {
+            display: flex;
+        }
+
+        .delete-confirm-modal {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 25px;
+            padding: 40px;
+            max-width: 400px;
+            width: 95%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: scaleIn 0.3s ease;
+        }
+
+        .delete-confirm-title {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .delete-confirm-message {
+            color: #e0e0e0;
+            font-size: 16px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .delete-confirm-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+        }
+
+        .delete-confirm-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .delete-confirm-btn.cancel {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .delete-confirm-btn.cancel:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .delete-confirm-btn.confirm {
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            color: white;
+        }
+
+        .delete-confirm-btn.confirm:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .view-events-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .select-all-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #e0e0e0;
+            font-size: 14px;
+        }
+
+        .select-all-checkbox {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #feca57;
+        }
+
+        .delete-selected-btn {
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .delete-selected-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .delete-selected-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .add-new-event-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .add-new-event-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+            margin-top: 70px;
+            padding: 40px;
+            flex: 1;
+        }
+
+        .page-title {
+            font-size: 28px;
+            color: #ffffff;
+            margin-bottom: 30px;
+            min-height: 40px;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            width: 100%;
+            height: 220px;
+            border-radius: 22px;
+            position: relative;
+            overflow: hidden;
+            display: grid;
+            place-items: center;
+            color: #fff;
+            background: radial-gradient(
+                120% 120% at 20% 0%,
+                rgba(255, 255, 255, 0.08),
+                transparent 55%
+            ),
+            linear-gradient(
+                180deg,
+                rgba(255, 255, 255, 0.06),
+                rgba(255, 255, 255, 0.02)
+            );
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+            transition:
+                transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
+                box-shadow 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
+                border-color 220ms ease;
+            will-change: transform;
+            text-decoration: none;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            inset: -60px;
+            background: radial-gradient(
+                circle at 30% 20%,
+                rgba(120, 170, 255, 0.22),
+                transparent 45%
+            ),
+            radial-gradient(
+                circle at 70% 80%,
+                rgba(160, 90, 255, 0.18),
+                transparent 50%
+            );
+            filter: blur(18px);
+            opacity: 0.55;
+            transition: opacity 220ms ease;
+        }
+
+        .card::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                135deg,
+                rgba(255, 255, 255, 0.12),
+                transparent 40%
+            );
+            opacity: 0.55;
+            pointer-events: none;
+        }
+
+        .card-icon {
+            height: 55%;
+            position: absolute;
+            z-index: 1;
+            font-size: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.92;
+            transform: translateY(2px) scale(1) rotateX(0deg) rotateY(0deg);
+            transition:
+                transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1),
+                opacity 260ms ease,
+                filter 260ms ease;
+            will-change: transform;
+            text-shadow: 
+                0 1px 0 rgba(255, 255, 255, 0.4),
+                0 2px 0 rgba(255, 255, 255, 0.3),
+                0 3px 0 rgba(255, 255, 255, 0.2),
+                0 4px 0 rgba(255, 255, 255, 0.1),
+                0 5px 10px rgba(0, 0, 0, 0.5),
+                0 10px 20px rgba(0, 0, 0, 0.3);
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4));
+        }
+
+        .card-icon.art { color: #f6d365; }
+        .card-icon.biology { color: #4facfe; }
+        .card-icon.physical { color: #96fbc4; }
+        .card-icon.physics { color: #43e97b; }
+        .card-icon.philosophy { color: #a8edea; }
+        .card-icon.geography { color: #fa709a; }
+        .card-icon.history { color: #4facfe; }
+        .card-icon.english { color: #667eea; }
+        .card-icon.portuguese { color: #f093fb; }
+        .card-icon.math { color: #667eea; }
+        .card-icon.chemistry { color: #fa709a; }
+        .card-icon.sociology { color: #d299c2; }
+
+        .textBox {
+            z-index: 2;
+            width: 100%;
+            padding: 18px 18px 16px;
+            display: grid;
+            gap: 10px;
+            justify-items: center;
+            opacity: 0;
+            transform: translateY(10px);
+            transition:
+                opacity 200ms ease,
+                transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .card-title {
+            margin: 0;
+            font-size: 18px;
+            letter-spacing: 0.2px;
+        }
+
+        .card-description {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.42);
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .card:hover,
+        .card:focus-visible {
+            transform: translateY(-4px) scale(1.03);
+            border-color: rgba(255, 255, 255, 0.18);
+            box-shadow: 0 28px 70px rgba(0, 0, 0, 0.45);
+        }
+
+        .card:hover::before,
+        .card:focus-visible::before {
+            opacity: 0.85;
+        }
+
+        .card:hover .textBox,
+        .card:focus-visible .textBox {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card:hover .card-icon,
+        .card:focus-visible .card-icon {
+            transform: translateY(-10px) scale(1.04) rotateX(10deg) rotateY(-10deg);
+            opacity: 0.35;
+            filter: blur(2px);
+        }
+
+        .card:hover .card-icon {
+            animation: float 2.4s ease-in-out infinite;
+            filter: blur(2px);
+        }
+
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(4px);
+            }
+            50% {
+                transform: translateY(-16px);
+            }
+        }
+
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .search-bar input {
+                width: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-graduation-cap"></i>
+            <span>Zona de Sobrevivencia</span>
+        </div>
+        <div class="header-right">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Buscar...">
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <ul class="sidebar-menu">
+            <li><a href="#" class="active"><i class="fas fa-home"></i> Início</a></li>
+            <li><a href="#"><i class="fas fa-book"></i> Meus Cursos</a></li>
+            <li><a href="#" onclick="openCalendarModal()"><i class="fas fa-calendar"></i> Agenda</a></li>
+            
+            <div class="menu-section">Matérias</div>
+            <li><a href="arte.html"><i class="fas fa-palette"></i> Arte</a></li>
+            <li><a href="biologia.html"><i class="fas fa-dna"></i> Biologia</a></li>
+            <li><a href="educacao-fisica.html"><i class="fas fa-running"></i> Educação Física</a></li>
+            <div class="hidden-subjects" id="hiddenSubjects">
+                <li><a href="fisica.html"><i class="fas fa-atom"></i> Física</a></li>
+                <li><a href="filosofia.html"><i class="fas fa-brain"></i> Filosofia</a></li>
+                <li><a href="geografia.html"><i class="fas fa-globe"></i> Geografia</a></li>
+                <li><a href="historia.html"><i class="fas fa-landmark"></i> História</a></li>
+                <li><a href="ingles.html"><i class="fas fa-language"></i> Inglês</a></li>
+                <li><a href="portugues.html"><i class="fas fa-book"></i> Língua Portuguesa</a></li>
+                <li><a href="matematica.html"><i class="fas fa-calculator"></i> Matemática</a></li>
+                <li><a href="quimica.html"><i class="fas fa-flask"></i> Química</a></li>
+                <li><a href="sociologia.html"><i class="fas fa-users"></i> Sociologia</a></li>
+            </div>
+            <button class="show-more-btn" id="showMoreBtn" onclick="toggleSubjects()">
+                <i class="fas fa-chevron-down"></i> Ver matérias
+            </button>
+            
+            <div class="menu-section">Configurações</div>
+            <li><a href="#"><i class="fas fa-cog"></i> Configurações</a></li>
+            <li><a href="#"><i class="fas fa-question-circle"></i> Ajuda</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <h1 class="page-title"><span id="typingText"></span></h1>
+        
+        <div class="cards-container">
+            <!-- Card 1 - Arte -->
+            <a href="arte.html" class="card">
+                <div class="card-icon art">
+                    <i class="fas fa-palette"></i>
+                </div>
+                <div class="textBox">
+                    <p class="card-title">Arte</p>
+                    <span>Expressão artística</span>
+                </div>
+            </a>
+
+            <!-- Card 2 - Biologia -->
+            <a href="biologia.html" class="card">
+                <div class="card-icon biology">
+                    <i class="fas fa-dna"></i>
+                </div>
+                <div class="textBox">
+                    <p class="card-title">Biologia</p>
+                    <span>Estudo dos seres vivos</span>
+                </div>
+            </a>
+
+            <!-- Card 3 - Educação Física -->
+            <a href="educacao-fisica.html" class="card">
+                <div class="card-icon physical">
+                    <i class="fas fa-running"></i>
+                </div>
+                <div class="textBox">
+                    <p class="card-title">Educação Física</p>
+                    <span>Atividades físicas</span>
+                </div>
+            </a>
+
+            <!-- Card 4 - Física -->
+            <a href="fisica.html" class="card">
+                <div class="card-icon physics">
+                    <i class="fas fa-atom"></i>
+                </div>
+                <div class="textBox">
+                    <p class="card-title">Física</p>
+                    <span>Fenômenos físicos</span>
+                </div>
+            </a>
+
+            <!-- Card 5 - Filosofia -->
+            <a href="filosofia.html" class="card">
+                <div class="card-icon philosophy">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <div class="textBox">
+                    <p class="card-title">Filosofia</p>
+                    <span>Pensamento crítico</span>
+                </div>
+            </a>
+
+            <!-- Card 6 - Geografia -->
+            <a href="geografia.html" class="card">
+                <div class="card-icon geography">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <div class="textBox">
+                    <p class="card-title">Geografia</p>
+                    <span>Estudo do planeta</span>
+                </div>
+            </a>
+
+            <!-- Card 7 - História -->
+            <a href="historia.html" class="card">
+                <div class="card-icon history">
+                    <i class="fas fa-landmark"></i>
+                </div>
+                <div class="textBox">
+                    <p class="card-title">História</p>
+                    <span>Eventos passados</span>
+                </div>
+            </a>
+
+            <!-- Card 8 - Inglês -->
+            <a href="ingles.html" class="card">
+                <div class="card-icon english">
+                    <i class="fas fa-language"></i>
+                </div>
+                <div class="textBox">
+                    <p class="card-title">Inglês</p>
+                    <span>Língua estrangeira</span>
+                </div>
+            </a>
+
+            <!-- Card 9 - Língua Portuguesa -->
+            <a href="portugues.html" class="card">
+                <div class="card-icon portuguese">
+                    <i class="fas fa-book"></i>
+                </div>
+                <div class="textBox">
+                    <p class="card-title">Língua Portuguesa</p>
+                    <span>Gramática e literatura</span>
+                </div>
+            </a>
+
+            <!-- Card 10 - Matemática -->
+            <a href="matematica.html" class="card">
+                <div class="card-icon math">
+                    <i class="fas fa-calculator"></i>
+                </div>
+                <div class="textBox">
+                    <p class="card-title">Matemática</p>
+                    <span>Cálculos e fórmulas</span>
+                </div>
+            </a>
+
+            <!-- Card 11 - Química -->
+            <a href="quimica.html" class="card">
+                <div class="card-icon chemistry">
+                    <i class="fas fa-flask"></i>
+                </div>
+                <div class="textBox">
+                    <p class="card-title">Química</p>
+                    <span>Elementos químicos</span>
+                </div>
+            </a>
+
+            <!-- Card 12 - Sociologia -->
+            <a href="sociologia.html" class="card">
+                <div class="card-icon sociology">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="textBox">
+                    <p class="card-title">Sociologia</p>
+                    <span>Estudo da sociedade</span>
+                </div>
+            </a>
+        </div>
+    </main>
+
+    <!-- Calendar Modal -->
+    <div class="calendar-modal-overlay" id="calendarModal">
+        <div class="calendar-modal">
+            <div class="calendar-header">
+                <h3 class="calendar-title">Agenda Geral</h3>
+                <button class="calendar-close" onclick="closeCalendarModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="calendar-nav">
+                <button class="calendar-nav-btn" onclick="changeMonth(-1)">
+                    <i class="fas fa-chevron-left"></i> Anterior
+                </button>
+                <span class="calendar-month-year" id="calendarMonthYear"></span>
+                <button class="calendar-nav-btn" onclick="changeMonth(1)">
+                    Próximo <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            <div class="calendar-grid" id="calendarGrid">
+                <!-- Calendar will be rendered here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Event Modal -->
+    <div class="add-event-modal-overlay" id="addEventModal">
+        <div class="add-event-modal">
+            <div class="add-event-header">
+                <h3 class="add-event-title">Adicionar Evento</h3>
+                <button class="add-event-close" onclick="closeAddEventModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="add-event-form">
+                <div class="form-group">
+                    <label>Título do Evento</label>
+                    <input type="text" id="newEventTitle" placeholder="Ex: Prova de Matemática">
+                </div>
+                <div class="form-group">
+                    <label>Data</label>
+                    <input type="date" id="newEventDate">
+                </div>
+                <div class="form-group">
+                    <label>Horário</label>
+                    <input type="time" id="newEventTime">
+                </div>
+                <div class="form-group">
+                    <label>Matéria</label>
+                    <select id="newEventSubject">
+                        <option value="arte">Arte</option>
+                        <option value="biologia">Biologia</option>
+                        <option value="educacao-fisica">Educação Física</option>
+                        <option value="fisica">Física</option>
+                        <option value="filosofia">Filosofia</option>
+                        <option value="geografia">Geografia</option>
+                        <option value="historia">História</option>
+                        <option value="ingles">Inglês</option>
+                        <option value="portugues">Língua Portuguesa</option>
+                        <option value="matematica">Matemática</option>
+                        <option value="quimica">Química</option>
+                        <option value="sociologia">Sociologia</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Descrição</label>
+                    <textarea id="newEventDescription" rows="3" placeholder="Descreva o evento..."></textarea>
+                </div>
+                <button class="add-event-btn" onclick="addNewEvent()">
+                    <i class="fas fa-plus"></i> Adicionar Evento
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Events Modal -->
+    <div class="view-events-modal-overlay" id="viewEventsModal">
+        <div class="view-events-modal">
+            <div class="view-events-header">
+                <h3 class="view-events-title">Eventos do Dia</h3>
+                <button class="view-events-close" onclick="closeViewEventsModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="view-events-date" id="viewEventsDate"></div>
+            <div id="viewEventsList"></div>
+            <div class="view-events-actions">
+                <div class="select-all-container">
+                    <input type="checkbox" class="select-all-checkbox" id="selectAllEvents" onchange="toggleSelectAll()">
+                    <label for="selectAllEvents">Selecionar todos</label>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="add-new-event-btn" onclick="addNewEventFromView()">
+                        <i class="fas fa-plus"></i> Adicionar Evento
+                    </button>
+                    <button class="delete-selected-btn" id="deleteSelectedBtn" onclick="deleteSelectedEvents()" disabled>
+                        <i class="fas fa-trash"></i> Excluir Selecionados
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Context Menu -->
+    <div class="context-menu" id="contextMenu">
+        <div class="context-menu-item" onclick="deleteEventFromContext()">
+            <i class="fas fa-trash"></i> Deletar Evento
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="delete-confirm-modal-overlay" id="deleteConfirmModal">
+        <div class="delete-confirm-modal">
+            <h3 class="delete-confirm-title">Confirmar Deleção</h3>
+            <p class="delete-confirm-message">Tem certeza que deseja deletar este evento?</p>
+            <div class="delete-confirm-buttons">
+                <button class="delete-confirm-btn cancel" onclick="closeDeleteConfirmModal()">Cancelar</button>
+                <button class="delete-confirm-btn confirm" onclick="confirmDeleteEvent()">Deletar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Animação de digitação
+        const text = 'Olá Lucas Gabriel!!';
+        const typingElement = document.getElementById('typingText');
+        let charIndex = 0;
+
+        function typeText() {
+            if (charIndex < text.length) {
+                typingElement.textContent += text.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeText, 100);
+            }
+        }
+
+        // Iniciar animação quando a página carregar
+        window.onload = function() {
+            setTimeout(typeText, 500);
+        };
+
+        function toggleSubjects() {
+            const hiddenSubjects = document.getElementById('hiddenSubjects');
+            const showMoreBtn = document.getElementById('showMoreBtn');
+            
+            if (hiddenSubjects.style.display === 'none' || hiddenSubjects.style.display === '') {
+                hiddenSubjects.style.display = 'block';
+                showMoreBtn.innerHTML = '<i class="fas fa-chevron-up"></i> Ver menos';
+            } else {
+                hiddenSubjects.style.display = 'none';
+                showMoreBtn.innerHTML = '<i class="fas fa-chevron-down"></i> Ver matérias';
+            }
+        }
+
+        // Calendar Modal Functions
+        let currentDate = new Date();
+        let allEvents = [];
+
+        const subjects = ['arte', 'biologia', 'educacao-fisica', 'fisica', 'filosofia', 'geografia', 'historia', 'ingles', 'portugues', 'matematica', 'quimica', 'sociologia', 'geral'];
+
+        function openCalendarModal() {
+            loadAllEvents();
+            renderCalendar();
+            document.getElementById('calendarModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeCalendarModal() {
+            document.getElementById('calendarModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function loadAllEvents() {
+            allEvents = [];
+            // Load only 'geral' events for the general calendar
+            const saved = localStorage.getItem('events_geral');
+            if (saved) {
+                const events = JSON.parse(saved);
+                events.forEach(event => {
+                    event.subject = 'geral';
+                });
+                allEvents = allEvents.concat(events);
+            }
+        }
+
+        function renderCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            const monthYear = document.getElementById('calendarMonthYear');
+            
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            
+            const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+            monthYear.textContent = `${monthNames[month]} ${year}`;
+            
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const today = new Date();
+            
+            const dayHeaders = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+            let html = dayHeaders.map(day => `<div class="calendar-day-header">${day}</div>`).join('');
+            
+            // Empty cells for days before the first day of the month
+            for (let i = 0; i < firstDay; i++) {
+                html += '<div class="calendar-day" style="opacity: 0.3;"></div>';
+            }
+            
+            // Days of the month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const dayEvents = allEvents.filter(e => e.date === dateStr);
+                const isToday = today.getDate() === day && today.getMonth() === month && today.getFullYear() === year;
+                
+                html += `<div class="calendar-day ${isToday ? 'today' : ''}" onclick="handleDayClick('${dateStr}')" oncontextmenu="handleDayRightClick(event, '${dateStr}')">`;
+                html += `<div class="calendar-day-number">${day}</div>`;
+                
+                dayEvents.forEach(event => {
+                    html += `<div class="calendar-event-wrapper">`;
+                    html += `<div class="calendar-event ${event.subject}">${event.title}</div>`;
+                    html += `<div class="event-tooltip">`;
+                    html += `<strong>${event.title}</strong>`;
+                    if (event.time) {
+                        html += `<div class="tooltip-time"><i class="fas fa-clock"></i> ${event.time}</div>`;
+                    }
+                    if (event.description) {
+                        html += `<div class="tooltip-desc">${event.description}</div>`;
+                    }
+                    html += `</div>`;
+                    html += `</div>`;
+                });
+                
+                html += '</div>';
+            }
+            
+            grid.innerHTML = html;
+        }
+
+        function changeMonth(delta) {
+            currentDate.setMonth(currentDate.getMonth() + delta);
+            renderCalendar();
+        }
+
+        // Close modal on outside click
+        document.getElementById('calendarModal').addEventListener('click', function(e) {
+            if (e.target.classList.contains('calendar-modal-overlay')) {
+                closeCalendarModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const modal = document.getElementById('calendarModal');
+                if (modal.classList.contains('active')) {
+                    closeCalendarModal();
+                }
+                const addEventModal = document.getElementById('addEventModal');
+                if (addEventModal.classList.contains('active')) {
+                    closeAddEventModal();
+                }
+            }
+        });
+
+        // Add Event Modal Functions
+        function openAddEventModal(dateStr) {
+            document.getElementById('newEventDate').value = dateStr;
+            document.getElementById('addEventModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeAddEventModal() {
+            document.getElementById('addEventModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            // Clear form
+            document.getElementById('newEventTitle').value = '';
+            document.getElementById('newEventDate').value = '';
+            document.getElementById('newEventTime').value = '';
+            document.getElementById('newEventDescription').value = '';
+            document.getElementById('newEventSubject').value = 'arte';
+        }
+
+        function addNewEvent() {
+            const title = document.getElementById('newEventTitle').value.trim();
+            const date = document.getElementById('newEventDate').value;
+            const time = document.getElementById('newEventTime').value;
+            const subject = document.getElementById('newEventSubject').value;
+            const description = document.getElementById('newEventDescription').value.trim();
+
+            if (!title) {
+                alert('Por favor, insira um título para o evento.');
+                return;
+            }
+
+            if (!date) {
+                alert('Por favor, selecione uma data.');
+                return;
+            }
+
+            const event = {
+                id: Date.now(),
+                title: title,
+                date: date,
+                time: time,
+                description: description,
+                timestamp: Date.now()
+            };
+
+            // Load existing events for the subject
+            const saved = localStorage.getItem(`events_${subject}`);
+            let events = saved ? JSON.parse(saved) : [];
+            events.push(event);
+            events.sort((a, b) => new Date(a.date + ' ' + a.time) - new Date(b.date + ' ' + b.time));
+            localStorage.setItem(`events_${subject}`, JSON.stringify(events));
+
+            // Reload all events and re-render calendar
+            loadAllEvents();
+            renderCalendar();
+            closeAddEventModal();
+        }
+
+        // Close add event modal on outside click
+        document.getElementById('addEventModal').addEventListener('click', function(e) {
+            if (e.target.classList.contains('add-event-modal-overlay')) {
+                closeAddEventModal();
+            }
+        });
+
+        // View Events Modal Functions
+        let selectedDate = null;
+        let selectedEvent = null;
+        let currentViewEvents = [];
+        let selectedEventIds = new Set();
+
+        function handleDayClick(dateStr) {
+            const dayEvents = allEvents.filter(e => e.date === dateStr);
+            if (dayEvents.length > 0) {
+                openViewEventsModal(dateStr, dayEvents);
+            } else {
+                openAddEventModal(dateStr);
+            }
+        }
+
+        function handleDayRightClick(event, dateStr) {
+            event.preventDefault();
+            const dayEvents = allEvents.filter(e => e.date === dateStr);
+            if (dayEvents.length > 0) {
+                selectedDate = dateStr;
+                if (dayEvents.length === 1) {
+                    selectedEvent = dayEvents[0];
+                } else {
+                    // If multiple events, show view modal first
+                    openViewEventsModal(dateStr, dayEvents);
+                    return;
+                }
+                showContextMenu(event.clientX, event.clientY);
+            }
+        }
+
+        function showContextMenu(x, y) {
+            const contextMenu = document.getElementById('contextMenu');
+            contextMenu.style.left = x + 'px';
+            contextMenu.style.top = y + 'px';
+            contextMenu.classList.add('active');
+        }
+
+        function hideContextMenu() {
+            document.getElementById('contextMenu').classList.remove('active');
+        }
+
+        function openViewEventsModal(dateStr, events) {
+            const [year, month, day] = dateStr.split('-');
+            document.getElementById('viewEventsDate').textContent = `${day}/${month}/${year}`;
+            
+            selectedDate = dateStr;
+            currentViewEvents = events;
+            selectedEventIds.clear();
+            document.getElementById('selectAllEvents').checked = false;
+            updateDeleteButton();
+            
+            const eventsList = document.getElementById('viewEventsList');
+            eventsList.innerHTML = events.map(event => `
+                <div class="view-event-item">
+                    <input type="checkbox" class="view-event-checkbox" 
+                           data-event-id="${event.id}" 
+                           onchange="toggleEventSelection(${event.id})">
+                    <div class="view-event-content">
+                        <div class="view-event-title">${event.title}</div>
+                        ${event.time ? `<div class="view-event-time"><i class="fas fa-clock"></i> ${event.time}</div>` : ''}
+                        ${event.description ? `<div class="view-event-description">${event.description}</div>` : ''}
+                    </div>
+                </div>
+            `).join('');
+            
+            document.getElementById('viewEventsModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeViewEventsModal() {
+            document.getElementById('viewEventsModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            currentViewEvents = [];
+            selectedEventIds.clear();
+        }
+
+        function toggleEventSelection(eventId) {
+            if (selectedEventIds.has(eventId)) {
+                selectedEventIds.delete(eventId);
+            } else {
+                selectedEventIds.add(eventId);
+            }
+            updateDeleteButton();
+            updateSelectAllCheckbox();
+        }
+
+        function toggleSelectAll() {
+            const selectAll = document.getElementById('selectAllEvents').checked;
+            if (selectAll) {
+                currentViewEvents.forEach(event => selectedEventIds.add(event.id));
+            } else {
+                selectedEventIds.clear();
+            }
+            
+            // Update all checkboxes
+            document.querySelectorAll('.view-event-checkbox').forEach(checkbox => {
+                checkbox.checked = selectAll;
+            });
+            
+            updateDeleteButton();
+        }
+
+        function updateSelectAllCheckbox() {
+            const selectAll = document.getElementById('selectAllEvents');
+            if (currentViewEvents.length > 0 && selectedEventIds.size === currentViewEvents.length) {
+                selectAll.checked = true;
+            } else {
+                selectAll.checked = false;
+            }
+        }
+
+        function updateDeleteButton() {
+            const deleteBtn = document.getElementById('deleteSelectedBtn');
+            deleteBtn.disabled = selectedEventIds.size === 0;
+            if (selectedEventIds.size > 0) {
+                deleteBtn.innerHTML = `<i class="fas fa-trash"></i> Excluir (${selectedEventIds.size})`;
+            } else {
+                deleteBtn.innerHTML = `<i class="fas fa-trash"></i> Excluir Selecionados`;
+            }
+        }
+
+        function deleteSelectedEvents() {
+            if (selectedEventIds.size === 0) return;
+            
+            const message = selectedEventIds.size === 1 
+                ? 'Tem certeza que deseja deletar este evento?' 
+                : `Tem certeza que deseja deletar ${selectedEventIds.size} eventos?`;
+            
+            document.querySelector('.delete-confirm-message').textContent = message;
+            openDeleteConfirmModal(null, true);
+        }
+
+        function addNewEventFromView() {
+            if (selectedDate) {
+                closeViewEventsModal();
+                openAddEventModal(selectedDate);
+            }
+        }
+
+        function deleteEventFromContext() {
+            hideContextMenu();
+            if (selectedEvent) {
+                openDeleteConfirmModal(selectedEvent);
+            }
+        }
+
+        function openDeleteConfirmModal(event, isMultiple = false) {
+            if (!isMultiple) {
+                selectedEvent = event;
+            }
+            document.getElementById('deleteConfirmModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDeleteConfirmModal() {
+            document.getElementById('deleteConfirmModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            selectedEvent = null;
+        }
+
+        function confirmDeleteEvent() {
+            // Check if deleting multiple events
+            if (selectedEventIds.size > 0) {
+                // Delete multiple events
+                const saved = localStorage.getItem('events_geral');
+                if (saved) {
+                    let events = JSON.parse(saved);
+                    events = events.filter(e => !selectedEventIds.has(e.id));
+                    localStorage.setItem('events_geral', JSON.stringify(events));
+                }
+                
+                // Reload and re-render
+                loadAllEvents();
+                renderCalendar();
+                closeDeleteConfirmModal();
+                closeViewEventsModal();
+            } else if (selectedEvent) {
+                // Delete single event
+                const saved = localStorage.getItem('events_geral');
+                if (saved) {
+                    let events = JSON.parse(saved);
+                    events = events.filter(e => e.id !== selectedEvent.id);
+                    localStorage.setItem('events_geral', JSON.stringify(events));
+                }
+                
+                // Reload and re-render
+                loadAllEvents();
+                renderCalendar();
+                closeDeleteConfirmModal();
+                closeViewEventsModal();
+            }
+        }
+
+        // Close context menu on click outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.context-menu')) {
+                hideContextMenu();
+            }
+        });
+
+        // Close view events modal on outside click
+        document.getElementById('viewEventsModal').addEventListener('click', function(e) {
+            if (e.target.classList.contains('view-events-modal-overlay')) {
+                closeViewEventsModal();
+            }
+        });
+
+        // Close delete confirm modal on outside click
+        document.getElementById('deleteConfirmModal').addEventListener('click', function(e) {
+            if (e.target.classList.contains('delete-confirm-modal-overlay')) {
+                closeDeleteConfirmModal();
+            }
+        });
+
+        // Update Escape key handler
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const modal = document.getElementById('calendarModal');
+                if (modal.classList.contains('active')) {
+                    closeCalendarModal();
+                }
+                const addEventModal = document.getElementById('addEventModal');
+                if (addEventModal.classList.contains('active')) {
+                    closeAddEventModal();
+                }
+                const viewEventsModal = document.getElementById('viewEventsModal');
+                if (viewEventsModal.classList.contains('active')) {
+                    closeViewEventsModal();
+                }
+                const deleteConfirmModal = document.getElementById('deleteConfirmModal');
+                if (deleteConfirmModal.classList.contains('active')) {
+                    closeDeleteConfirmModal();
+                }
+                hideContextMenu();
+            }
+        });
+    </script>
+</body>
+</html>

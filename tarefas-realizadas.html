@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarefas Realizadas - Site de Estudos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #ff6b6b 0%, #feca57 50%, #ff9ff3 100%);
+            --secondary-gradient: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            --bg-gradient-1: rgba(255, 107, 107, 0.1);
+            --bg-gradient-2: rgba(254, 202, 87, 0.1);
+            --accent-color: #feca57;
+            --shadow-color: rgba(255, 107, 107, 0.4);
+        }
+
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+
+        * {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            box-shadow: 0 4px 20px rgba(255, 107, 107, 0.3);
+            z-index: 1000;
+        }
+
+        .logo {
+            color: white;
+            font-size: 26px;
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo i {
+            font-size: 30px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 70px;
+            width: 250px;
+            height: calc(100vh - 70px);
+            background: transparent;
+            box-shadow: none;
+            padding: 20px 0;
+            overflow-y: auto;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            gap: 15px;
+        }
+
+        .sidebar-menu a:hover {
+            background: var(--secondary-gradient);
+            color: white;
+            border-radius: 0 25px 25px 0;
+            margin-right: 15px;
+        }
+
+        .hidden-subjects {
+            display: none;
+        }
+
+        .show-more-btn {
+            margin: 10px 25px;
+            padding: 10px 20px;
+            background: var(--secondary-gradient);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .show-more-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+
+        .main-content {
+            margin-left: 250px;
+            margin-top: 70px;
+            padding: 40px;
+            flex: 1;
+            background: radial-gradient(circle at 20% 50%, var(--bg-gradient-1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 50%, var(--bg-gradient-2) 0%, transparent 50%);
+        }
+
+        .subject-header {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin-bottom: 50px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .subject-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            background: var(--primary-gradient);
+            color: white;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .subject-title {
+            color: white;
+            font-size: 48px;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .content-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 35px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .section-title {
+            color: var(--accent-color);
+            font-size: 28px;
+            margin-bottom: 25px;
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 30px;
+            background: var(--secondary-gradient);
+            border-radius: 2px;
+        }
+
+        .add-task-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            color: #e0e0e0;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 15px;
+            color: white;
+            font-size: 15px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .form-group select option {
+            background: #1a1a2e;
+            color: white;
+        }
+
+        .add-task-btn {
+            background: var(--secondary-gradient);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .add-task-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px var(--shadow-color);
+        }
+
+        .tasks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .task-card {
+            background: linear-gradient(135deg, var(--bg-gradient-1) 0%, var(--bg-gradient-2) 100%);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .task-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .task-subject {
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .task-date {
+            color: #e0e0e0;
+            font-size: 12px;
+        }
+
+        .task-title {
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .task-description {
+            color: #e0e0e0;
+            font-size: 14px;
+            line-height: 1.6;
+            flex: 1;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .task-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .btn-view {
+            background: var(--secondary-gradient);
+            color: white;
+        }
+
+        .btn-delete {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+        }
+
+        .task-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 50px;
+            color: #e0e0e0;
+        }
+
+        .empty-state i {
+            font-size: 80px;
+            color: rgba(255, 107, 107, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .empty-state p {
+            font-size: 18px;
+        }
+
+        .image-upload-area {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .image-upload-area:hover {
+            border-color: var(--accent-color);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .image-upload-area i {
+            font-size: 40px;
+            color: rgba(255, 107, 107, 0.5);
+            margin-bottom: 10px;
+        }
+
+        .image-upload-area p {
+            color: #e0e0e0;
+            font-size: 14px;
+        }
+
+        .task-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .task-detail-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .task-detail-modal-overlay.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .task-detail-modal {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 25px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: scaleIn 0.3s ease;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .task-detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .task-detail-title {
+            color: white;
+            font-size: 28px;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+
+        .task-detail-close {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .task-detail-close:hover {
+            background: rgba(255, 107, 107, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .task-detail-image {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 25px;
+        }
+
+        .task-detail-info {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .task-detail-badge {
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .task-detail-date {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        .task-detail-description {
+            color: #e0e0e0;
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+
+        .task-detail-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+        }
+
+        .task-detail-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-view-delete {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+        }
+
+        .btn-view-delete:hover {
+            background: rgba(255, 107, 107, 0.3);
+            transform: scale(1.05);
+        }
+
+        .btn-view-close {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+        }
+
+        .btn-view-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-view {
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            color: white;
+        }
+
+        .btn-view:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .fullscreen-image-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .fullscreen-image-overlay.active {
+            display: flex;
+        }
+
+        .fullscreen-image {
+            max-width: 95vw;
+            max-height: 95vh;
+            object-fit: contain;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .fullscreen-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fullscreen-close:hover {
+            background: rgba(255, 107, 107, 0.5);
+            transform: rotate(90deg);
+        }
+
+        .task-detail-image {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .task-detail-image:hover {
+            opacity: 0.9;
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-graduation-cap"></i>
+            <span>Zona de Sobrevivencia</span>
+        </div>
+        <div class="header-right">
+            <button class="back-btn" onclick="history.back()">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </button>
+        </div>
+    </header>
+
+    <aside class="sidebar">
+        <ul class="sidebar-menu">
+            <li><a href="index.html"><i class="fas fa-home"></i> Início</a></li>
+            <li><a href="anexos.html?materia=" id="anexosLink"><i class="fas fa-paperclip"></i> Anexos</a></li>
+            <li><a href="tarefas-realizadas.html?materia=" id="tarefasLink" class="active"><i class="fas fa-check-circle"></i> Tarefas Realizadas</a></li>
+            <li><a href="agenda.html?materia=" id="agendaLink"><i class="fas fa-calendar-alt"></i> Agenda</a></li>
+            <button class="show-more-btn" id="showMoreBtn" onclick="toggleSubjects()">
+                <i class="fas fa-chevron-down"></i> Ver matérias
+            </button>
+            <div class="hidden-subjects" id="hiddenSubjects">
+                <li><a href="arte.html"><i class="fas fa-palette"></i> Arte</a></li>
+                <li><a href="biologia.html"><i class="fas fa-dna"></i> Biologia</a></li>
+                <li><a href="educacao-fisica.html"><i class="fas fa-running"></i> Educação Física</a></li>
+                <li><a href="fisica.html"><i class="fas fa-atom"></i> Física</a></li>
+                <li><a href="filosofia.html"><i class="fas fa-brain"></i> Filosofia</a></li>
+                <li><a href="geografia.html"><i class="fas fa-globe"></i> Geografia</a></li>
+                <li><a href="historia.html"><i class="fas fa-landmark"></i> História</a></li>
+                <li><a href="ingles.html"><i class="fas fa-language"></i> Inglês</a></li>
+                <li><a href="portugues.html"><i class="fas fa-book"></i> Língua Portuguesa</a></li>
+                <li><a href="matematica.html"><i class="fas fa-calculator"></i> Matemática</a></li>
+                <li><a href="quimica.html"><i class="fas fa-flask"></i> Química</a></li>
+                <li><a href="sociologia.html"><i class="fas fa-users"></i> Sociologia</a></li>
+            </div>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <div class="subject-header">
+            <div class="subject-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h1 class="subject-title">Tarefas Realizadas</h1>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">Adicionar Tarefa Realizada</h2>
+            <div class="add-task-form">
+                <div class="form-group">
+                    <label>Título da Tarefa</label>
+                    <input type="text" id="taskTitle" placeholder="Ex: Exercícios de Matemática">
+                </div>
+                <div class="form-group">
+                    <label>Matéria</label>
+                    <select id="taskSubject">
+                        <option value="">Selecione uma matéria</option>
+                        <option value="Arte">Arte</option>
+                        <option value="Biologia">Biologia</option>
+                        <option value="Educação Física">Educação Física</option>
+                        <option value="Física">Física</option>
+                        <option value="Filosofia">Filosofia</option>
+                        <option value="Geografia">Geografia</option>
+                        <option value="História">História</option>
+                        <option value="Inglês">Inglês</option>
+                        <option value="Língua Portuguesa">Língua Portuguesa</option>
+                        <option value="Matemática">Matemática</option>
+                        <option value="Química">Química</option>
+                        <option value="Sociologia">Sociologia</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Descrição</label>
+                    <textarea id="taskDescription" rows="3" placeholder="Descreva a tarefa realizada..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Anexar Imagem (opcional)</label>
+                    <div class="image-upload-area" onclick="document.getElementById('taskImage').click()">
+                        <i class="fas fa-image"></i>
+                        <p id="imagePreviewText">Clique para selecionar uma imagem</p>
+                        <img id="imagePreview" style="display: none; max-width: 100%; max-height: 200px; border-radius: 10px; margin-top: 10px;">
+                        <input type="file" id="taskImage" accept="image/*" style="display: none;" onchange="previewImage(event)">
+                    </div>
+                </div>
+                <button class="add-task-btn" onclick="addTask()">
+                    <i class="fas fa-plus"></i> Adicionar Tarefa
+                </button>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">Minhas Tarefas</h2>
+            <div class="tasks-grid" id="tasksGrid">
+                <div class="empty-state">
+                    <i class="fas fa-clipboard-check"></i>
+                    <p>Nenhuma tarefa registrada ainda</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Task Detail Modal -->
+    <div class="task-detail-modal-overlay" id="taskDetailModal">
+        <div class="task-detail-modal">
+            <div class="task-detail-header">
+                <h3 class="task-detail-title" id="modalTaskTitle">Título da Tarefa</h3>
+                <button class="task-detail-close" onclick="closeTaskDetailModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <img id="modalTaskImage" class="task-detail-image" style="display: none;" onclick="openFullscreenImage()">
+            <div class="task-detail-info">
+                <span class="task-detail-badge" id="modalTaskSubject">Matéria</span>
+                <span class="task-detail-date" id="modalTaskDate">Data</span>
+            </div>
+            <p class="task-detail-description" id="modalTaskDescription">Descrição da tarefa</p>
+            <div class="task-detail-actions">
+                <button class="task-detail-btn btn-view-delete" id="modalDeleteBtn">
+                    <i class="fas fa-trash"></i> Deletar
+                </button>
+                <button class="task-detail-btn btn-view-close" onclick="closeTaskDetailModal()">
+                    <i class="fas fa-times"></i> Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fullscreen Image Modal -->
+    <div class="fullscreen-image-overlay" id="fullscreenImageModal">
+        <button class="fullscreen-close" onclick="closeFullscreenImage()">
+            <i class="fas fa-times"></i>
+        </button>
+        <img id="fullscreenImage" class="fullscreen-image" onclick="closeFullscreenImage()">
+    </div>
+
+    <script>
+        function toggleSubjects() {
+            const hiddenSubjects = document.getElementById('hiddenSubjects');
+            const showMoreBtn = document.getElementById('showMoreBtn');
+            
+            if (hiddenSubjects.style.display === 'none' || hiddenSubjects.style.display === '') {
+                hiddenSubjects.style.display = 'block';
+                showMoreBtn.innerHTML = '<i class="fas fa-chevron-up"></i> Ver menos';
+            } else {
+                hiddenSubjects.style.display = 'none';
+                showMoreBtn.innerHTML = '<i class="fas fa-chevron-down"></i> Ver matérias';
+            }
+        }
+
+        let tasks = [];
+        
+        // Get current subject from URL parameter
+        const materiaAtual = new URLSearchParams(window.location.search).get('materia') || 'geral';
+
+        // Define color themes for each subject
+        const themes = {
+            'arte': {
+                primary: 'linear-gradient(135deg, #ff6b6b 0%, #feca57 50%, #ff9ff3 100%)',
+                secondary: 'linear-gradient(135deg, #ff6b6b 0%, #feca57 100%)',
+                bg1: 'rgba(255, 107, 107, 0.1)',
+                bg2: 'rgba(254, 202, 87, 0.1)',
+                accent: '#feca57',
+                shadow: 'rgba(255, 107, 107, 0.4)'
+            },
+            'biologia': {
+                primary: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 50%, #43e97b 100%)',
+                secondary: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                bg1: 'rgba(79, 172, 254, 0.1)',
+                bg2: 'rgba(0, 242, 254, 0.1)',
+                accent: '#00f2fe',
+                shadow: 'rgba(79, 172, 254, 0.4)'
+            },
+            'educacao-fisica': {
+                primary: 'linear-gradient(135deg, #96fbc4 0%, #f9f586 50%, #43e97b 100%)',
+                secondary: 'linear-gradient(135deg, #96fbc4 0%, #f9f586 100%)',
+                bg1: 'rgba(150, 251, 196, 0.1)',
+                bg2: 'rgba(249, 245, 134, 0.1)',
+                accent: '#f9f586',
+                shadow: 'rgba(150, 251, 196, 0.4)'
+            },
+            'fisica': {
+                primary: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 50%, #4facfe 100%)',
+                secondary: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+                bg1: 'rgba(67, 233, 123, 0.1)',
+                bg2: 'rgba(56, 249, 215, 0.1)',
+                accent: '#38f9d7',
+                shadow: 'rgba(67, 233, 123, 0.4)'
+            },
+            'filosofia': {
+                primary: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 50%, #ff9ff3 100%)',
+                secondary: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
+                bg1: 'rgba(168, 237, 234, 0.1)',
+                bg2: 'rgba(254, 214, 227, 0.1)',
+                accent: '#fed6e3',
+                shadow: 'rgba(168, 237, 234, 0.4)'
+            },
+            'geografia': {
+                primary: 'linear-gradient(135deg, #fa709a 0%, #fee140 50%, #feca57 100%)',
+                secondary: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+                bg1: 'rgba(250, 112, 154, 0.1)',
+                bg2: 'rgba(254, 225, 64, 0.1)',
+                accent: '#fee140',
+                shadow: 'rgba(250, 112, 154, 0.4)'
+            },
+            'historia': {
+                primary: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #ff6b6b 100%)',
+                secondary: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)',
+                bg1: 'rgba(255, 154, 158, 0.1)',
+                bg2: 'rgba(254, 207, 239, 0.1)',
+                accent: '#fecfef',
+                shadow: 'rgba(255, 154, 158, 0.4)'
+            },
+            'ingles': {
+                primary: 'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 50%, #4facfe 100%)',
+                secondary: 'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)',
+                bg1: 'rgba(161, 196, 253, 0.1)',
+                bg2: 'rgba(194, 233, 251, 0.1)',
+                accent: '#c2e9fb',
+                shadow: 'rgba(161, 196, 253, 0.4)'
+            },
+            'portugues': {
+                primary: 'linear-gradient(135deg, #c3cfe2 0%, #f093fb 50%, #f5576c 100%)',
+                secondary: 'linear-gradient(135deg, #c3cfe2 0%, #f093fb 100%)',
+                bg1: 'rgba(195, 207, 226, 0.1)',
+                bg2: 'rgba(240, 147, 251, 0.1)',
+                accent: '#f093fb',
+                shadow: 'rgba(195, 207, 226, 0.4)'
+            },
+            'matematica': {
+                primary: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+                secondary: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                bg1: 'rgba(102, 126, 234, 0.1)',
+                bg2: 'rgba(118, 75, 162, 0.1)',
+                accent: '#764ba2',
+                shadow: 'rgba(102, 126, 234, 0.4)'
+            },
+            'quimica': {
+                primary: 'linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #fa709a 100%)',
+                secondary: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                bg1: 'rgba(240, 147, 251, 0.1)',
+                bg2: 'rgba(245, 87, 108, 0.1)',
+                accent: '#f5576c',
+                shadow: 'rgba(240, 147, 251, 0.4)'
+            },
+            'sociologia': {
+                primary: 'linear-gradient(135deg, #d299c2 0%, #fef9d7 50%, #fa709a 100%)',
+                secondary: 'linear-gradient(135deg, #d299c2 0%, #fef9d7 100%)',
+                bg1: 'rgba(210, 153, 194, 0.1)',
+                bg2: 'rgba(254, 249, 215, 0.1)',
+                accent: '#fef9d7',
+                shadow: 'rgba(210, 153, 194, 0.4)'
+            },
+            'geral': {
+                primary: 'linear-gradient(135deg, #ff6b6b 0%, #feca57 50%, #ff9ff3 100%)',
+                secondary: 'linear-gradient(135deg, #ff6b6b 0%, #feca57 100%)',
+                bg1: 'rgba(255, 107, 107, 0.1)',
+                bg2: 'rgba(254, 202, 87, 0.1)',
+                accent: '#feca57',
+                shadow: 'rgba(255, 107, 107, 0.4)'
+            }
+        };
+
+        // Apply theme based on current subject
+        const theme = themes[materiaAtual] || themes['geral'];
+        document.documentElement.style.setProperty('--primary-gradient', theme.primary);
+        document.documentElement.style.setProperty('--secondary-gradient', theme.secondary);
+        document.documentElement.style.setProperty('--bg-gradient-1', theme.bg1);
+        document.documentElement.style.setProperty('--bg-gradient-2', theme.bg2);
+        document.documentElement.style.setProperty('--accent-color', theme.accent);
+        document.documentElement.style.setProperty('--shadow-color', theme.shadow);
+
+        // Update sidebar links with current subject
+        document.getElementById('anexosLink').href = `anexos.html?materia=${materiaAtual}`;
+        document.getElementById('tarefasLink').href = `tarefas-realizadas.html?materia=${materiaAtual}`;
+        document.getElementById('agendaLink').href = `agenda.html?materia=${materiaAtual}`;
+
+        // Migrate old data to new format
+        function migrateOldData() {
+            const oldTasks = localStorage.getItem('tasks');
+            if (oldTasks && !localStorage.getItem('tasks_geral')) {
+                localStorage.setItem('tasks_geral', oldTasks);
+                localStorage.removeItem('tasks');
+            }
+            
+            const oldAttachments = localStorage.getItem('attachments');
+            if (oldAttachments && !localStorage.getItem('attachments_geral')) {
+                localStorage.setItem('attachments_geral', oldAttachments);
+                localStorage.removeItem('attachments');
+            }
+        }
+
+        // Load tasks from localStorage
+        function loadTasks() {
+            migrateOldData(); // Migrate old data first
+            const saved = localStorage.getItem(`tasks_${materiaAtual}`);
+            if (saved) {
+                tasks = JSON.parse(saved);
+                renderTasks();
+            }
+        }
+
+        // Save tasks to localStorage
+        function saveTasks() {
+            localStorage.setItem(`tasks_${materiaAtual}`, JSON.stringify(tasks));
+        }
+
+        function addTask() {
+            const title = document.getElementById('taskTitle').value.trim();
+            const subject = document.getElementById('taskSubject').value;
+            const description = document.getElementById('taskDescription').value.trim();
+            const imageInput = document.getElementById('taskImage');
+
+            if (!title) {
+                alert('Por favor, insira um título para a tarefa.');
+                return;
+            }
+
+            if (!subject) {
+                alert('Por favor, selecione uma matéria.');
+                return;
+            }
+
+            const task = {
+                id: Date.now(),
+                title: title,
+                subject: subject,
+                description: description,
+                date: new Date().toLocaleDateString('pt-BR'),
+                timestamp: Date.now(),
+                imageData: null
+            };
+
+            if (imageInput.files.length > 0) {
+                const file = imageInput.files[0];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    task.imageData = e.target.result;
+                    tasks.unshift(task);
+                    saveTasks();
+                    renderTasks();
+                    clearForm();
+                };
+                reader.readAsDataURL(file);
+            } else {
+                tasks.unshift(task);
+                saveTasks();
+                renderTasks();
+                clearForm();
+            }
+        }
+
+        function clearForm() {
+            document.getElementById('taskTitle').value = '';
+            document.getElementById('taskSubject').value = '';
+            document.getElementById('taskDescription').value = '';
+            document.getElementById('taskImage').value = '';
+            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('imagePreviewText').style.display = 'block';
+        }
+
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    document.getElementById('imagePreviewText').style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function deleteTask(id) {
+            if (confirm('Tem certeza que deseja deletar esta tarefa?')) {
+                tasks = tasks.filter(t => t.id !== id);
+                saveTasks();
+                renderTasks();
+                closeTaskDetailModal();
+            }
+        }
+
+        function viewTask(id) {
+            const task = tasks.find(t => t.id === id);
+            if (!task) return;
+
+            document.getElementById('modalTaskTitle').textContent = task.title;
+            document.getElementById('modalTaskSubject').textContent = task.subject;
+            document.getElementById('modalTaskDate').textContent = task.date;
+            document.getElementById('modalTaskDescription').textContent = task.description || 'Sem descrição';
+
+            const modalImage = document.getElementById('modalTaskImage');
+            if (task.imageData) {
+                modalImage.src = task.imageData;
+                modalImage.style.display = 'block';
+            } else {
+                modalImage.style.display = 'none';
+            }
+
+            document.getElementById('modalDeleteBtn').onclick = function() {
+                deleteTask(id);
+            };
+
+            openTaskDetailModal();
+        }
+
+        function openTaskDetailModal() {
+            document.getElementById('taskDetailModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeTaskDetailModal() {
+            document.getElementById('taskDetailModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal on outside click
+        document.getElementById('taskDetailModal').addEventListener('click', function(e) {
+            if (e.target.classList.contains('task-detail-modal-overlay')) {
+                closeTaskDetailModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const modal = document.getElementById('taskDetailModal');
+                if (modal.classList.contains('active')) {
+                    closeTaskDetailModal();
+                }
+                const fullscreenModal = document.getElementById('fullscreenImageModal');
+                if (fullscreenModal.classList.contains('active')) {
+                    closeFullscreenImage();
+                }
+            }
+        });
+
+        function openFullscreenImage() {
+            const modalImage = document.getElementById('modalTaskImage');
+            const fullscreenImage = document.getElementById('fullscreenImage');
+            fullscreenImage.src = modalImage.src;
+            document.getElementById('fullscreenImageModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeFullscreenImage() {
+            document.getElementById('fullscreenImageModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close fullscreen modal on outside click
+        document.getElementById('fullscreenImageModal').addEventListener('click', function(e) {
+            if (e.target.classList.contains('fullscreen-image-overlay')) {
+                closeFullscreenImage();
+            }
+        });
+
+        function renderTasks() {
+            const tasksGrid = document.getElementById('tasksGrid');
+
+            if (tasks.length === 0) {
+                tasksGrid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-clipboard-check"></i>
+                        <p>Nenhuma tarefa registrada ainda</p>
+                    </div>
+                `;
+                return;
+            }
+
+            tasksGrid.innerHTML = tasks.map(task => `
+                <div class="task-card">
+                    <div class="task-header">
+                        <span class="task-subject">${task.subject}</span>
+                        <span class="task-date">${task.date}</span>
+                    </div>
+                    <h3 class="task-title">${task.title}</h3>
+                    <p class="task-description">${task.description || 'Sem descrição'}</p>
+                    <div class="task-actions">
+                        <button class="task-btn btn-view" onclick="viewTask(${task.id})">
+                            <i class="fas fa-eye"></i> Ver
+                        </button>
+                        <button class="task-btn btn-delete" onclick="deleteTask(${task.id})">
+                            <i class="fas fa-trash"></i> Deletar
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateStats() {
+            const totalTasks = document.getElementById('totalTasks');
+            const totalSubjects = document.getElementById('totalSubjects');
+            const mostProductive = document.getElementById('mostProductive');
+
+            totalTasks.textContent = tasks.length;
+
+            const subjects = [...new Set(tasks.map(t => t.subject))];
+            totalSubjects.textContent = subjects.length;
+
+            if (tasks.length > 0) {
+                const subjectCounts = {};
+                tasks.forEach(t => {
+                    subjectCounts[t.subject] = (subjectCounts[t.subject] || 0) + 1;
+                });
+                const maxSubject = Object.keys(subjectCounts).reduce((a, b) => 
+                    subjectCounts[a] > subjectCounts[b] ? a : b
+                );
+                mostProductive.textContent = maxSubject;
+            } else {
+                mostProductive.textContent = '-';
+            }
+        }
+
+        // Load tasks on page load
+        loadTasks();
+    </script>
+</body>
+</html>

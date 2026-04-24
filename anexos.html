@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anexos - Site de Estudos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #ff6b6b 0%, #feca57 50%, #ff9ff3 100%);
+            --secondary-gradient: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            --bg-gradient-1: rgba(255, 107, 107, 0.1);
+            --bg-gradient-2: rgba(254, 202, 87, 0.1);
+            --accent-color: #feca57;
+            --shadow-color: rgba(255, 107, 107, 0.4);
+        }
+
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+
+        * {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            box-shadow: 0 4px 20px rgba(255, 107, 107, 0.3);
+            z-index: 1000;
+        }
+
+        .logo {
+            color: white;
+            font-size: 26px;
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo i {
+            font-size: 30px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 70px;
+            width: 250px;
+            height: calc(100vh - 70px);
+            background: transparent;
+            box-shadow: none;
+            padding: 20px 0;
+            overflow-y: auto;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            gap: 15px;
+        }
+
+        .sidebar-menu a:hover {
+            background: var(--secondary-gradient);
+            color: white;
+            border-radius: 0 25px 25px 0;
+            margin-right: 15px;
+        }
+
+        .hidden-subjects {
+            display: none;
+        }
+
+        .show-more-btn {
+            margin: 10px 25px;
+            padding: 10px 20px;
+            background: var(--secondary-gradient);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .show-more-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+
+        .main-content {
+            margin-left: 250px;
+            margin-top: 70px;
+            padding: 40px;
+            flex: 1;
+            background: radial-gradient(circle at 20% 50%, var(--bg-gradient-1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 50%, var(--bg-gradient-2) 0%, transparent 50%);
+        }
+
+        .subject-header {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin-bottom: 50px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .subject-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            background: var(--primary-gradient);
+            color: white;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .subject-title {
+            color: white;
+            font-size: 48px;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .content-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 35px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .section-title {
+            color: var(--accent-color);
+            font-size: 28px;
+            margin-bottom: 25px;
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 30px;
+            background: var(--secondary-gradient);
+            border-radius: 2px;
+        }
+
+        .upload-area {
+            border: 3px dashed rgba(255, 107, 107, 0.5);
+            border-radius: 20px;
+            padding: 50px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .upload-area:hover {
+            border-color: #feca57;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .upload-area i {
+            font-size: 60px;
+            color: #ff6b6b;
+            margin-bottom: 20px;
+        }
+
+        .upload-area p {
+            color: #e0e0e0;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .upload-area span {
+            color: #feca57;
+            font-size: 14px;
+        }
+
+        .attachments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .attachment-card {
+            background: linear-gradient(135deg, var(--bg-gradient-1) 0%, var(--bg-gradient-2) 100%);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .attachment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+        }
+
+        .attachment-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            color: white;
+        }
+
+        .attachment-info h4 {
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .attachment-info p {
+            color: #e0e0e0;
+            font-size: 13px;
+        }
+
+        .attachment-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .attachment-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .btn-download {
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            color: white;
+        }
+
+        .btn-delete {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+        }
+
+        .attachment-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 50px;
+            color: #e0e0e0;
+        }
+
+        .empty-state i {
+            font-size: 80px;
+            color: rgba(255, 107, 107, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .empty-state p {
+            font-size: 18px;
+        }
+
+        .selection-bar {
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            padding: 15px 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .selection-info {
+            color: white;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .selection-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .selection-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-download-selected {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .btn-delete-selected {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .selection-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .attachment-card {
+            position: relative;
+        }
+
+        .attachment-card.selected {
+            border: 2px solid #feca57;
+            box-shadow: 0 0 20px rgba(254, 202, 87, 0.5);
+        }
+
+        .attachment-checkbox {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .attachment-checkbox:hover {
+            border-color: #feca57;
+        }
+
+        .attachment-checkbox.checked {
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            border-color: #feca57;
+        }
+
+        .attachment-checkbox i {
+            color: white;
+            font-size: 12px;
+            display: none;
+        }
+
+        .attachment-checkbox.checked i {
+            display: block;
+        }
+
+        .select-all-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 15px 25px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .select-all-checkbox {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .select-all-checkbox:hover {
+            border-color: #feca57;
+        }
+
+        .select-all-checkbox.checked {
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            border-color: #feca57;
+        }
+
+        .select-all-checkbox i {
+            color: white;
+            font-size: 12px;
+            display: none;
+        }
+
+        .select-all-checkbox.checked i {
+            display: block;
+        }
+
+        .select-all-label {
+            color: #e0e0e0;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .confirm-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .confirm-modal-overlay.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .confirm-modal {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 25px;
+            padding: 40px;
+            max-width: 450px;
+            width: 90%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: scaleIn 0.3s ease;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .confirm-modal-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 40px;
+            color: white;
+        }
+
+        .confirm-modal h3 {
+            color: white;
+            font-size: 24px;
+            font-family: 'Playfair Display', serif;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .confirm-modal p {
+            color: #e0e0e0;
+            text-align: center;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .confirm-modal-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .confirm-modal-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+
+        .btn-confirm-cancel {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+        }
+
+        .btn-confirm-cancel:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-confirm-delete {
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            color: white;
+        }
+
+        .btn-confirm-delete:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(255, 107, 107, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-graduation-cap"></i>
+            <span>Zona de Sobrevivencia</span>
+        </div>
+        <div class="header-right">
+            <button class="back-btn" onclick="history.back()">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </button>
+        </div>
+    </header>
+
+    <aside class="sidebar">
+        <ul class="sidebar-menu">
+            <li><a href="index.html"><i class="fas fa-home"></i> Início</a></li>
+            <li><a href="anexos.html?materia=" id="anexosLink" class="active"><i class="fas fa-paperclip"></i> Anexos</a></li>
+            <li><a href="tarefas-realizadas.html?materia=" id="tarefasLink"><i class="fas fa-check-circle"></i> Tarefas Realizadas</a></li>
+            <li><a href="agenda.html?materia=" id="agendaLink"><i class="fas fa-calendar-alt"></i> Agenda</a></li>
+            <button class="show-more-btn" id="showMoreBtn" onclick="toggleSubjects()">
+                <i class="fas fa-chevron-down"></i> Ver matérias
+            </button>
+            <div class="hidden-subjects" id="hiddenSubjects">
+                <li><a href="arte.html"><i class="fas fa-palette"></i> Arte</a></li>
+                <li><a href="biologia.html"><i class="fas fa-dna"></i> Biologia</a></li>
+                <li><a href="educacao-fisica.html"><i class="fas fa-running"></i> Educação Física</a></li>
+                <li><a href="fisica.html"><i class="fas fa-atom"></i> Física</a></li>
+                <li><a href="filosofia.html"><i class="fas fa-brain"></i> Filosofia</a></li>
+                <li><a href="geografia.html"><i class="fas fa-globe"></i> Geografia</a></li>
+                <li><a href="historia.html"><i class="fas fa-landmark"></i> História</a></li>
+                <li><a href="ingles.html"><i class="fas fa-language"></i> Inglês</a></li>
+                <li><a href="portugues.html"><i class="fas fa-book"></i> Língua Portuguesa</a></li>
+                <li><a href="matematica.html"><i class="fas fa-calculator"></i> Matemática</a></li>
+                <li><a href="quimica.html"><i class="fas fa-flask"></i> Química</a></li>
+                <li><a href="sociologia.html"><i class="fas fa-users"></i> Sociologia</a></li>
+            </div>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <div class="subject-header">
+            <div class="subject-icon">
+                <i class="fas fa-paperclip"></i>
+            </div>
+            <h1 class="subject-title">Anexos</h1>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">Adicionar Anexo</h2>
+            <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Clique para fazer upload ou arraste arquivos aqui</p>
+                <span>PDF, DOC, XLS, JPG, PNG (máx. 10MB)</span>
+                <input type="file" id="fileInput" style="display: none;" multiple>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">Meus Anexos</h2>
+            <div class="selection-bar" id="selectionBar">
+                <div class="selection-info">
+                    <i class="fas fa-check-square"></i>
+                    <span id="selectedCount">0 selecionados</span>
+                </div>
+                <div class="selection-actions">
+                    <button class="selection-btn btn-download-selected" onclick="downloadSelected()">
+                        <i class="fas fa-download"></i> Baixar selecionados
+                    </button>
+                    <button class="selection-btn btn-delete-selected" onclick="deleteSelected()">
+                        <i class="fas fa-trash"></i> Deletar selecionados
+                    </button>
+                    <button class="selection-btn btn-delete-selected" onclick="clearSelection()">
+                        <i class="fas fa-times"></i> Cancelar
+                    </button>
+                </div>
+            </div>
+            <div class="select-all-container" id="selectAllContainer" style="display: none;">
+                <div class="select-all-checkbox" id="selectAllCheckbox" onclick="toggleSelectAll()">
+                    <i class="fas fa-check"></i>
+                </div>
+                <span class="select-all-label" onclick="toggleSelectAll()">Selecionar todos</span>
+            </div>
+            <div class="attachments-grid" id="attachmentsGrid">
+                <div class="empty-state">
+                    <i class="fas fa-folder-open"></i>
+                    <p>Nenhum anexo ainda</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Confirm Modal -->
+    <div class="confirm-modal-overlay" id="confirmModal">
+        <div class="confirm-modal">
+            <div class="confirm-modal-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h3>Confirmar Exclusão</h3>
+            <p id="confirmMessage">Tem certeza que deseja deletar este arquivo?</p>
+            <div class="confirm-modal-actions">
+                <button class="confirm-modal-btn btn-confirm-cancel" onclick="closeConfirmModal()">
+                    Cancelar
+                </button>
+                <button class="confirm-modal-btn btn-confirm-delete" id="confirmDeleteBtn">
+                    Deletar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSubjects() {
+            const hiddenSubjects = document.getElementById('hiddenSubjects');
+            const showMoreBtn = document.getElementById('showMoreBtn');
+            
+            if (hiddenSubjects.style.display === 'none' || hiddenSubjects.style.display === '') {
+                hiddenSubjects.style.display = 'block';
+                showMoreBtn.innerHTML = '<i class="fas fa-chevron-up"></i> Ver menos';
+            } else {
+                hiddenSubjects.style.display = 'none';
+                showMoreBtn.innerHTML = '<i class="fas fa-chevron-down"></i> Ver matérias';
+            }
+        }
+
+        // File upload handling
+        const fileInput = document.getElementById('fileInput');
+        const attachmentsGrid = document.getElementById('attachmentsGrid');
+        let attachments = [];
+        let selectedAttachments = new Set();
+        
+        // Get current subject from URL parameter
+        const materiaAtual = new URLSearchParams(window.location.search).get('materia') || 'geral';
+
+        // Define color themes for each subject
+        const themes = {
+            'arte': {
+                primary: 'linear-gradient(135deg, #ff6b6b 0%, #feca57 50%, #ff9ff3 100%)',
+                secondary: 'linear-gradient(135deg, #ff6b6b 0%, #feca57 100%)',
+                bg1: 'rgba(255, 107, 107, 0.1)',
+                bg2: 'rgba(254, 202, 87, 0.1)',
+                accent: '#feca57',
+                shadow: 'rgba(255, 107, 107, 0.4)'
+            },
+            'biologia': {
+                primary: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 50%, #43e97b 100%)',
+                secondary: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                bg1: 'rgba(79, 172, 254, 0.1)',
+                bg2: 'rgba(0, 242, 254, 0.1)',
+                accent: '#00f2fe',
+                shadow: 'rgba(79, 172, 254, 0.4)'
+            },
+            'educacao-fisica': {
+                primary: 'linear-gradient(135deg, #96fbc4 0%, #f9f586 50%, #43e97b 100%)',
+                secondary: 'linear-gradient(135deg, #96fbc4 0%, #f9f586 100%)',
+                bg1: 'rgba(150, 251, 196, 0.1)',
+                bg2: 'rgba(249, 245, 134, 0.1)',
+                accent: '#f9f586',
+                shadow: 'rgba(150, 251, 196, 0.4)'
+            },
+            'fisica': {
+                primary: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 50%, #4facfe 100%)',
+                secondary: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+                bg1: 'rgba(67, 233, 123, 0.1)',
+                bg2: 'rgba(56, 249, 215, 0.1)',
+                accent: '#38f9d7',
+                shadow: 'rgba(67, 233, 123, 0.4)'
+            },
+            'filosofia': {
+                primary: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 50%, #ff9ff3 100%)',
+                secondary: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
+                bg1: 'rgba(168, 237, 234, 0.1)',
+                bg2: 'rgba(254, 214, 227, 0.1)',
+                accent: '#fed6e3',
+                shadow: 'rgba(168, 237, 234, 0.4)'
+            },
+            'geografia': {
+                primary: 'linear-gradient(135deg, #fa709a 0%, #fee140 50%, #feca57 100%)',
+                secondary: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+                bg1: 'rgba(250, 112, 154, 0.1)',
+                bg2: 'rgba(254, 225, 64, 0.1)',
+                accent: '#fee140',
+                shadow: 'rgba(250, 112, 154, 0.4)'
+            },
+            'historia': {
+                primary: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #ff6b6b 100%)',
+                secondary: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)',
+                bg1: 'rgba(255, 154, 158, 0.1)',
+                bg2: 'rgba(254, 207, 239, 0.1)',
+                accent: '#fecfef',
+                shadow: 'rgba(255, 154, 158, 0.4)'
+            },
+            'ingles': {
+                primary: 'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 50%, #4facfe 100%)',
+                secondary: 'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)',
+                bg1: 'rgba(161, 196, 253, 0.1)',
+                bg2: 'rgba(194, 233, 251, 0.1)',
+                accent: '#c2e9fb',
+                shadow: 'rgba(161, 196, 253, 0.4)'
+            },
+            'portugues': {
+                primary: 'linear-gradient(135deg, #c3cfe2 0%, #f093fb 50%, #f5576c 100%)',
+                secondary: 'linear-gradient(135deg, #c3cfe2 0%, #f093fb 100%)',
+                bg1: 'rgba(195, 207, 226, 0.1)',
+                bg2: 'rgba(240, 147, 251, 0.1)',
+                accent: '#f093fb',
+                shadow: 'rgba(195, 207, 226, 0.4)'
+            },
+            'matematica': {
+                primary: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+                secondary: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                bg1: 'rgba(102, 126, 234, 0.1)',
+                bg2: 'rgba(118, 75, 162, 0.1)',
+                accent: '#764ba2',
+                shadow: 'rgba(102, 126, 234, 0.4)'
+            },
+            'quimica': {
+                primary: 'linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #fa709a 100%)',
+                secondary: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                bg1: 'rgba(240, 147, 251, 0.1)',
+                bg2: 'rgba(245, 87, 108, 0.1)',
+                accent: '#f5576c',
+                shadow: 'rgba(240, 147, 251, 0.4)'
+            },
+            'sociologia': {
+                primary: 'linear-gradient(135deg, #d299c2 0%, #fef9d7 50%, #fa709a 100%)',
+                secondary: 'linear-gradient(135deg, #d299c2 0%, #fef9d7 100%)',
+                bg1: 'rgba(210, 153, 194, 0.1)',
+                bg2: 'rgba(254, 249, 215, 0.1)',
+                accent: '#fef9d7',
+                shadow: 'rgba(210, 153, 194, 0.4)'
+            },
+            'geral': {
+                primary: 'linear-gradient(135deg, #ff6b6b 0%, #feca57 50%, #ff9ff3 100%)',
+                secondary: 'linear-gradient(135deg, #ff6b6b 0%, #feca57 100%)',
+                bg1: 'rgba(255, 107, 107, 0.1)',
+                bg2: 'rgba(254, 202, 87, 0.1)',
+                accent: '#feca57',
+                shadow: 'rgba(255, 107, 107, 0.4)'
+            }
+        };
+
+        // Apply theme based on current subject
+        const theme = themes[materiaAtual] || themes['geral'];
+        document.documentElement.style.setProperty('--primary-gradient', theme.primary);
+        document.documentElement.style.setProperty('--secondary-gradient', theme.secondary);
+        document.documentElement.style.setProperty('--bg-gradient-1', theme.bg1);
+        document.documentElement.style.setProperty('--bg-gradient-2', theme.bg2);
+        document.documentElement.style.setProperty('--accent-color', theme.accent);
+        document.documentElement.style.setProperty('--shadow-color', theme.shadow);
+
+        // Update sidebar links with current subject
+        document.getElementById('anexosLink').href = `anexos.html?materia=${materiaAtual}`;
+        document.getElementById('tarefasLink').href = `tarefas-realizadas.html?materia=${materiaAtual}`;
+        document.getElementById('agendaLink').href = `agenda.html?materia=${materiaAtual}`;
+
+        // Migrate old data to new format
+        function migrateOldData() {
+            const oldAttachments = localStorage.getItem('attachments');
+            if (oldAttachments && !localStorage.getItem('attachments_geral')) {
+                localStorage.setItem('attachments_geral', oldAttachments);
+                localStorage.removeItem('attachments');
+            }
+        }
+
+        // Load attachments from localStorage on page load
+        function loadAttachments() {
+            migrateOldData(); // Migrate old data first
+            const saved = localStorage.getItem(`attachments_${materiaAtual}`);
+            if (saved) {
+                attachments = JSON.parse(saved);
+                // Recreate URLs for each attachment
+                attachments.forEach(attachment => {
+                    attachment.url = URL.createObjectURL(base64ToBlob(attachment.data, attachment.mimeType));
+                });
+                renderAttachments();
+            }
+        }
+
+        // Convert base64 to Blob
+        function base64ToBlob(base64, mimeType) {
+            const byteCharacters = atob(base64);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            return new Blob([byteArray], { type: mimeType });
+        }
+
+        // Convert File to base64
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => {
+                    const base64 = reader.result.split(',')[1];
+                    resolve(base64);
+                };
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        // Save attachments to localStorage
+        function saveAttachments() {
+            const toSave = attachments.map(a => ({
+                id: a.id,
+                name: a.name,
+                size: a.size,
+                type: a.type,
+                date: a.date,
+                mimeType: a.mimeType,
+                data: a.data
+            }));
+            localStorage.setItem(`attachments_${materiaAtual}`, JSON.stringify(toSave));
+        }
+
+        fileInput.addEventListener('change', async function(e) {
+            const files = Array.from(e.target.files);
+            for (const file of files) {
+                try {
+                    const base64 = await fileToBase64(file);
+                    const attachment = {
+                        id: Date.now() + Math.random(),
+                        name: file.name,
+                        size: formatFileSize(file.size),
+                        type: getFileType(file.name),
+                        date: new Date().toLocaleDateString('pt-BR'),
+                        mimeType: file.type,
+                        data: base64,
+                        url: URL.createObjectURL(file)
+                    };
+                    attachments.push(attachment);
+                } catch (error) {
+                    console.error('Error processing file:', error);
+                    alert('Erro ao processar arquivo. O arquivo pode ser muito grande.');
+                }
+            }
+            saveAttachments();
+            renderAttachments();
+        });
+
+        // Load attachments on page load
+        loadAttachments();
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+        }
+
+        function getFileType(filename) {
+            const ext = filename.split('.').pop().toLowerCase();
+            const types = {
+                'pdf': 'pdf',
+                'doc': 'word',
+                'docx': 'word',
+                'xls': 'excel',
+                'xlsx': 'excel',
+                'jpg': 'image',
+                'jpeg': 'image',
+                'png': 'image',
+                'gif': 'image'
+            };
+            return types[ext] || 'file';
+        }
+
+        function getFileIcon(type) {
+            const icons = {
+                'pdf': 'fa-file-pdf',
+                'word': 'fa-file-word',
+                'excel': 'fa-file-excel',
+                'image': 'fa-file-image',
+                'file': 'fa-file'
+            };
+            return icons[type] || 'fa-file';
+        }
+
+        function renderAttachments() {
+            if (attachments.length === 0) {
+                attachmentsGrid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-folder-open"></i>
+                        <p>Nenhum anexo ainda</p>
+                    </div>
+                `;
+                return;
+            }
+
+            attachmentsGrid.innerHTML = attachments.map(attachment => `
+                <div class="attachment-card ${selectedAttachments.has(attachment.id) ? 'selected' : ''}" id="card-${attachment.id}">
+                    <div class="attachment-checkbox ${selectedAttachments.has(attachment.id) ? 'checked' : ''}" onclick="toggleSelection(${attachment.id}, event)">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="attachment-icon">
+                        <i class="fas ${getFileIcon(attachment.type)}"></i>
+                    </div>
+                    <div class="attachment-info">
+                        <h4>${attachment.name}</h4>
+                        <p>${attachment.size} • ${attachment.date}</p>
+                    </div>
+                    <div class="attachment-actions">
+                        <button class="attachment-btn btn-download" onclick="downloadAttachment(${attachment.id})">
+                            <i class="fas fa-download"></i> Baixar
+                        </button>
+                        <button class="attachment-btn btn-download" onclick="openAttachment(${attachment.id})">
+                            <i class="fas fa-external-link-alt"></i> Abrir
+                        </button>
+                        <button class="attachment-btn btn-delete" onclick="deleteAttachment(${attachment.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            
+            updateSelectionUI();
+        }
+
+        function deleteAttachment(id) {
+            const attachment = attachments.find(a => a.id === id);
+            if (attachment && attachment.url) {
+                URL.revokeObjectURL(attachment.url);
+            }
+            attachments = attachments.filter(a => a.id !== id);
+            saveAttachments();
+            renderAttachments();
+        }
+
+        function downloadAttachment(id) {
+            const attachment = attachments.find(a => a.id === id);
+            if (attachment && attachment.url) {
+                const a = document.createElement('a');
+                a.href = attachment.url;
+                a.download = attachment.name;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }
+        }
+
+        function openAttachment(id) {
+            const attachment = attachments.find(a => a.id === id);
+            if (attachment && attachment.url) {
+                window.open(attachment.url, '_blank');
+            }
+        }
+
+        function toggleSelection(id, event) {
+            event.stopPropagation();
+            if (selectedAttachments.has(id)) {
+                selectedAttachments.delete(id);
+            } else {
+                selectedAttachments.add(id);
+            }
+            renderAttachments();
+        }
+
+        function updateSelectionUI() {
+            const selectionBar = document.getElementById('selectionBar');
+            const selectAllContainer = document.getElementById('selectAllContainer');
+            const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+            const selectedCount = document.getElementById('selectedCount');
+
+            if (selectedAttachments.size > 0) {
+                selectionBar.style.display = 'flex';
+                selectAllContainer.style.display = 'flex';
+                selectedCount.textContent = `${selectedAttachments.size} selecionado${selectedAttachments.size > 1 ? 's' : ''}`;
+                
+                if (selectedAttachments.size === attachments.length) {
+                    selectAllCheckbox.classList.add('checked');
+                } else {
+                    selectAllCheckbox.classList.remove('checked');
+                }
+            } else {
+                selectionBar.style.display = 'none';
+                selectAllContainer.style.display = 'none';
+                selectAllCheckbox.classList.remove('checked');
+            }
+        }
+
+        function toggleSelectAll() {
+            const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+            if (selectedAttachments.size === attachments.length) {
+                selectedAttachments.clear();
+            } else {
+                attachments.forEach(a => selectedAttachments.add(a.id));
+            }
+            renderAttachments();
+        }
+
+        function clearSelection() {
+            selectedAttachments.clear();
+            renderAttachments();
+        }
+
+        function downloadSelected() {
+            selectedAttachments.forEach(id => {
+                downloadAttachment(id);
+            });
+        }
+
+        function deleteSelected() {
+            const message = `Tem certeza que deseja deletar ${selectedAttachments.size} arquivo${selectedAttachments.size > 1 ? 's' : ''}?`;
+            document.getElementById('confirmMessage').textContent = message;
+            document.getElementById('confirmDeleteBtn').onclick = function() {
+                selectedAttachments.forEach(id => {
+                    const attachment = attachments.find(a => a.id === id);
+                    if (attachment && attachment.url) {
+                        URL.revokeObjectURL(attachment.url);
+                    }
+                });
+                attachments = attachments.filter(a => !selectedAttachments.has(a.id));
+                selectedAttachments.clear();
+                saveAttachments();
+                
+                // Hide selection UI immediately
+                document.getElementById('selectionBar').style.display = 'none';
+                document.getElementById('selectAllContainer').style.display = 'none';
+                document.getElementById('selectAllCheckbox').classList.remove('checked');
+                
+                renderAttachments();
+                closeConfirmModal();
+            };
+            openConfirmModal();
+        }
+
+        function openConfirmModal() {
+            document.getElementById('confirmModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('confirmModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal on outside click
+        document.getElementById('confirmModal').addEventListener('click', function(e) {
+            if (e.target.classList.contains('confirm-modal-overlay')) {
+                closeConfirmModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const modal = document.getElementById('confirmModal');
+                if (modal.classList.contains('active')) {
+                    closeConfirmModal();
+                }
+            }
+        });
+
+        // Drag and drop
+        const uploadArea = document.querySelector('.upload-area');
+        
+        uploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#feca57';
+            uploadArea.style.background = 'rgba(255, 255, 255, 0.05)';
+        });
+
+        uploadArea.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            uploadArea.style.borderColor = 'rgba(255, 107, 107, 0.5)';
+            uploadArea.style.background = 'rgba(255, 255, 255, 0.02)';
+        });
+
+        uploadArea.addEventListener('drop', async function(e) {
+            e.preventDefault();
+            uploadArea.style.borderColor = 'rgba(255, 107, 107, 0.5)';
+            uploadArea.style.background = 'rgba(255, 255, 255, 0.02)';
+            
+            const files = Array.from(e.dataTransfer.files);
+            for (const file of files) {
+                try {
+                    const base64 = await fileToBase64(file);
+                    const attachment = {
+                        id: Date.now() + Math.random(),
+                        name: file.name,
+                        size: formatFileSize(file.size),
+                        type: getFileType(file.name),
+                        date: new Date().toLocaleDateString('pt-BR'),
+                        mimeType: file.type,
+                        data: base64,
+                        url: URL.createObjectURL(file)
+                    };
+                    attachments.push(attachment);
+                } catch (error) {
+                    console.error('Error processing file:', error);
+                    alert('Erro ao processar arquivo. O arquivo pode ser muito grande.');
+                }
+            }
+            saveAttachments();
+            renderAttachments();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda - Site de Estudos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #ff6b6b 0%, #feca57 50%, #ff9ff3 100%);
+            --secondary-gradient: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            --bg-gradient-1: rgba(255, 107, 107, 0.1);
+            --bg-gradient-2: rgba(254, 202, 87, 0.1);
+            --accent-color: #feca57;
+            --shadow-color: rgba(255, 107, 107, 0.4);
+        }
+
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+
+        * {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            box-shadow: 0 4px 20px rgba(255, 107, 107, 0.3);
+            z-index: 1000;
+        }
+
+        .logo {
+            color: white;
+            font-size: 26px;
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo i {
+            font-size: 30px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 70px;
+            width: 250px;
+            height: calc(100vh - 70px);
+            background: transparent;
+            box-shadow: none;
+            padding: 20px 0;
+            overflow-y: auto;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            gap: 15px;
+        }
+
+        .sidebar-menu a:hover {
+            background: var(--secondary-gradient);
+            color: white;
+            border-radius: 0 25px 25px 0;
+            margin-right: 15px;
+        }
+
+        .hidden-subjects {
+            display: none;
+        }
+
+        .show-more-btn {
+            margin: 10px 25px;
+            padding: 10px 20px;
+            background: var(--secondary-gradient);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .show-more-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+
+        .main-content {
+            margin-left: 250px;
+            margin-top: 70px;
+            padding: 40px;
+            flex: 1;
+            background: radial-gradient(circle at 20% 50%, var(--bg-gradient-1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 50%, var(--bg-gradient-2) 0%, transparent 50%);
+        }
+
+        .subject-header {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin-bottom: 50px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .subject-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            background: var(--primary-gradient);
+            color: white;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .subject-title {
+            color: white;
+            font-size: 48px;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .content-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 35px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .section-title {
+            color: var(--accent-color);
+            font-size: 28px;
+            margin-bottom: 25px;
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 30px;
+            background: var(--secondary-gradient);
+            border-radius: 2px;
+        }
+
+        .add-event-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            color: #e0e0e0;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 15px;
+            color: white;
+            font-size: 15px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .form-group select option {
+            background: #1a1a2e;
+            color: white;
+        }
+
+        .add-event-btn {
+            background: var(--secondary-gradient);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .add-event-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px var(--shadow-color);
+        }
+
+        .event-btn {
+            background: var(--secondary-gradient);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .event-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .event-card {
+            background: linear-gradient(135deg, var(--bg-gradient-1) 0%, var(--bg-gradient-2) 100%);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+        }
+
+        .event-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .event-date {
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+            min-width: 80px;
+        }
+
+        .event-time {
+            color: #e0e0e0;
+            font-size: 12px;
+        }
+
+        .event-title {
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .event-description {
+            color: #e0e0e0;
+            font-size: 14px;
+            line-height: 1.6;
+            flex: 1;
+        }
+
+        .event-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .event-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .btn-delete {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+        }
+
+        .event-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 50px;
+            color: #e0e0e0;
+        }
+
+        .empty-state i {
+            font-size: 80px;
+            color: rgba(255, 107, 107, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .empty-state p {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-graduation-cap"></i>
+            <span>Zona de Sobrevivencia</span>
+        </div>
+        <div class="header-right">
+            <button class="back-btn" onclick="history.back()">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </button>
+        </div>
+    </header>
+
+    <aside class="sidebar">
+        <ul class="sidebar-menu">
+            <li><a href="index.html"><i class="fas fa-home"></i> Início</a></li>
+            <li><a href="anexos.html?materia=" id="anexosLink"><i class="fas fa-paperclip"></i> Anexos</a></li>
+            <li><a href="tarefas-realizadas.html?materia=" id="tarefasLink"><i class="fas fa-check-circle"></i> Tarefas Realizadas</a></li>
+            <li><a href="agenda.html?materia=" id="agendaLink" class="active"><i class="fas fa-calendar-alt"></i> Agenda</a></li>
+            <button class="show-more-btn" id="showMoreBtn" onclick="toggleSubjects()">
+                <i class="fas fa-chevron-down"></i> Ver matérias
+            </button>
+            <div class="hidden-subjects" id="hiddenSubjects">
+                <li><a href="arte.html"><i class="fas fa-palette"></i> Arte</a></li>
+                <li><a href="biologia.html"><i class="fas fa-dna"></i> Biologia</a></li>
+                <li><a href="educacao-fisica.html"><i class="fas fa-running"></i> Educação Física</a></li>
+                <li><a href="fisica.html"><i class="fas fa-atom"></i> Física</a></li>
+                <li><a href="filosofia.html"><i class="fas fa-brain"></i> Filosofia</a></li>
+                <li><a href="geografia.html"><i class="fas fa-globe"></i> Geografia</a></li>
+                <li><a href="historia.html"><i class="fas fa-landmark"></i> História</a></li>
+                <li><a href="ingles.html"><i class="fas fa-language"></i> Inglês</a></li>
+                <li><a href="portugues.html"><i class="fas fa-book"></i> Língua Portuguesa</a></li>
+                <li><a href="matematica.html"><i class="fas fa-calculator"></i> Matemática</a></li>
+                <li><a href="quimica.html"><i class="fas fa-flask"></i> Química</a></li>
+                <li><a href="sociologia.html"><i class="fas fa-users"></i> Sociologia</a></li>
+            </div>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <div class="subject-header">
+            <div class="subject-icon">
+                <i class="fas fa-calendar-alt"></i>
+            </div>
+            <h1 class="subject-title">Agenda</h1>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">Adicionar Evento</h2>
+            <div class="add-event-form">
+                <div class="form-group">
+                    <label>Título do Evento</label>
+                    <input type="text" id="eventTitle" placeholder="Ex: Prova de Matemática">
+                </div>
+                <div class="form-group">
+                    <label>Data</label>
+                    <input type="date" id="eventDate">
+                </div>
+                <div class="form-group">
+                    <label>Horário</label>
+                    <input type="time" id="eventTime">
+                </div>
+                <div class="form-group">
+                    <label>Descrição</label>
+                    <textarea id="eventDescription" rows="3" placeholder="Descreva o evento..."></textarea>
+                </div>
+                <button class="add-event-btn" onclick="addEvent()">
+                    <i class="fas fa-plus"></i> Adicionar Evento
+                </button>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">Meus Eventos</h2>
+            <div class="events-grid" id="eventsGrid">
+                <div class="empty-state">
+                    <i class="fas fa-calendar-times"></i>
+                    <p>Nenhum evento agendado</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function toggleSubjects() {
+            const hiddenSubjects = document.getElementById('hiddenSubjects');
+            const showMoreBtn = document.getElementById('showMoreBtn');
+            
+            if (hiddenSubjects.style.display === 'none' || hiddenSubjects.style.display === '') {
+                hiddenSubjects.style.display = 'block';
+                showMoreBtn.innerHTML = '<i class="fas fa-chevron-up"></i> Ver menos';
+            } else {
+                hiddenSubjects.style.display = 'none';
+                showMoreBtn.innerHTML = '<i class="fas fa-chevron-down"></i> Ver matérias';
+            }
+        }
+
+        let events = [];
+        
+        // Get current subject from URL parameter
+        const materiaAtual = new URLSearchParams(window.location.search).get('materia') || 'geral';
+
+        // Define color themes for each subject
+        const themes = {
+            'arte': {
+                primary: 'linear-gradient(135deg, #ff6b6b 0%, #feca57 50%, #ff9ff3 100%)',
+                secondary: 'linear-gradient(135deg, #ff6b6b 0%, #feca57 100%)',
+                bg1: 'rgba(255, 107, 107, 0.1)',
+                bg2: 'rgba(254, 202, 87, 0.1)',
+                accent: '#feca57',
+                shadow: 'rgba(255, 107, 107, 0.4)'
+            },
+            'biologia': {
+                primary: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 50%, #43e97b 100%)',
+                secondary: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                bg1: 'rgba(79, 172, 254, 0.1)',
+                bg2: 'rgba(0, 242, 254, 0.1)',
+                accent: '#00f2fe',
+                shadow: 'rgba(79, 172, 254, 0.4)'
+            },
+            'educacao-fisica': {
+                primary: 'linear-gradient(135deg, #96fbc4 0%, #f9f586 50%, #43e97b 100%)',
+                secondary: 'linear-gradient(135deg, #96fbc4 0%, #f9f586 100%)',
+                bg1: 'rgba(150, 251, 196, 0.1)',
+                bg2: 'rgba(249, 245, 134, 0.1)',
+                accent: '#f9f586',
+                shadow: 'rgba(150, 251, 196, 0.4)'
+            },
+            'fisica': {
+                primary: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 50%, #4facfe 100%)',
+                secondary: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+                bg1: 'rgba(67, 233, 123, 0.1)',
+                bg2: 'rgba(56, 249, 215, 0.1)',
+                accent: '#38f9d7',
+                shadow: 'rgba(67, 233, 123, 0.4)'
+            },
+            'filosofia': {
+                primary: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 50%, #ff9ff3 100%)',
+                secondary: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
+                bg1: 'rgba(168, 237, 234, 0.1)',
+                bg2: 'rgba(254, 214, 227, 0.1)',
+                accent: '#fed6e3',
+                shadow: 'rgba(168, 237, 234, 0.4)'
+            },
+            'geografia': {
+                primary: 'linear-gradient(135deg, #fa709a 0%, #fee140 50%, #feca57 100%)',
+                secondary: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+                bg1: 'rgba(250, 112, 154, 0.1)',
+                bg2: 'rgba(254, 225, 64, 0.1)',
+                accent: '#fee140',
+                shadow: 'rgba(250, 112, 154, 0.4)'
+            },
+            'historia': {
+                primary: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #ff6b6b 100%)',
+                secondary: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)',
+                bg1: 'rgba(255, 154, 158, 0.1)',
+                bg2: 'rgba(254, 207, 239, 0.1)',
+                accent: '#fecfef',
+                shadow: 'rgba(255, 154, 158, 0.4)'
+            },
+            'ingles': {
+                primary: 'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 50%, #4facfe 100%)',
+                secondary: 'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)',
+                bg1: 'rgba(161, 196, 253, 0.1)',
+                bg2: 'rgba(194, 233, 251, 0.1)',
+                accent: '#c2e9fb',
+                shadow: 'rgba(161, 196, 253, 0.4)'
+            },
+            'portugues': {
+                primary: 'linear-gradient(135deg, #c3cfe2 0%, #f093fb 50%, #f5576c 100%)',
+                secondary: 'linear-gradient(135deg, #c3cfe2 0%, #f093fb 100%)',
+                bg1: 'rgba(195, 207, 226, 0.1)',
+                bg2: 'rgba(240, 147, 251, 0.1)',
+                accent: '#f093fb',
+                shadow: 'rgba(195, 207, 226, 0.4)'
+            },
+            'matematica': {
+                primary: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+                secondary: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                bg1: 'rgba(102, 126, 234, 0.1)',
+                bg2: 'rgba(118, 75, 162, 0.1)',
+                accent: '#764ba2',
+                shadow: 'rgba(102, 126, 234, 0.4)'
+            },
+            'quimica': {
+                primary: 'linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #fa709a 100%)',
+                secondary: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                bg1: 'rgba(240, 147, 251, 0.1)',
+                bg2: 'rgba(245, 87, 108, 0.1)',
+                accent: '#f5576c',
+                shadow: 'rgba(240, 147, 251, 0.4)'
+            },
+            'sociologia': {
+                primary: 'linear-gradient(135deg, #d299c2 0%, #fef9d7 50%, #fa709a 100%)',
+                secondary: 'linear-gradient(135deg, #d299c2 0%, #fef9d7 100%)',
+                bg1: 'rgba(210, 153, 194, 0.1)',
+                bg2: 'rgba(254, 249, 215, 0.1)',
+                accent: '#fef9d7',
+                shadow: 'rgba(210, 153, 194, 0.4)'
+            },
+            'geral': {
+                primary: 'linear-gradient(135deg, #ff6b6b 0%, #feca57 50%, #ff9ff3 100%)',
+                secondary: 'linear-gradient(135deg, #ff6b6b 0%, #feca57 100%)',
+                bg1: 'rgba(255, 107, 107, 0.1)',
+                bg2: 'rgba(254, 202, 87, 0.1)',
+                accent: '#feca57',
+                shadow: 'rgba(255, 107, 107, 0.4)'
+            }
+        };
+
+        // Apply theme based on current subject
+        const theme = themes[materiaAtual] || themes['geral'];
+        document.documentElement.style.setProperty('--primary-gradient', theme.primary);
+        document.documentElement.style.setProperty('--secondary-gradient', theme.secondary);
+        document.documentElement.style.setProperty('--bg-gradient-1', theme.bg1);
+        document.documentElement.style.setProperty('--bg-gradient-2', theme.bg2);
+        document.documentElement.style.setProperty('--accent-color', theme.accent);
+        document.documentElement.style.setProperty('--shadow-color', theme.shadow);
+
+        // Update sidebar links with current subject
+        document.getElementById('anexosLink').href = `anexos.html?materia=${materiaAtual}`;
+        document.getElementById('tarefasLink').href = `tarefas-realizadas.html?materia=${materiaAtual}`;
+        document.getElementById('agendaLink').href = `agenda.html?materia=${materiaAtual}`;
+
+        // Load events from localStorage
+        function loadEvents() {
+            const saved = localStorage.getItem(`events_${materiaAtual}`);
+            if (saved) {
+                events = JSON.parse(saved);
+                renderEvents();
+            }
+        }
+
+        // Save events to localStorage
+        function saveEvents() {
+            localStorage.setItem(`events_${materiaAtual}`, JSON.stringify(events));
+        }
+
+        function addEvent() {
+            const title = document.getElementById('eventTitle').value.trim();
+            const date = document.getElementById('eventDate').value;
+            const time = document.getElementById('eventTime').value;
+            const description = document.getElementById('eventDescription').value.trim();
+
+            if (!title) {
+                alert('Por favor, insira um título para o evento.');
+                return;
+            }
+
+            if (!date) {
+                alert('Por favor, selecione uma data.');
+                return;
+            }
+
+            const event = {
+                id: Date.now(),
+                title: title,
+                date: date,
+                time: time,
+                description: description,
+                timestamp: Date.now()
+            };
+
+            events.push(event);
+            events.sort((a, b) => new Date(a.date + ' ' + a.time) - new Date(b.date + ' ' + b.time));
+            saveEvents();
+            renderEvents();
+
+            // Clear form
+            document.getElementById('eventTitle').value = '';
+            document.getElementById('eventDate').value = '';
+            document.getElementById('eventTime').value = '';
+            document.getElementById('eventDescription').value = '';
+        }
+
+        function deleteEvent(id) {
+            if (confirm('Tem certeza que deseja deletar este evento?')) {
+                events = events.filter(e => e.id !== id);
+                saveEvents();
+                renderEvents();
+            }
+        }
+
+        function formatDate(dateStr) {
+            const [year, month, day] = dateStr.split('-');
+            return `${day}/${month}/${year}`;
+        }
+
+        function renderEvents() {
+            const eventsGrid = document.getElementById('eventsGrid');
+
+            if (events.length === 0) {
+                eventsGrid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-calendar-times"></i>
+                        <p>Nenhum evento agendado</p>
+                    </div>
+                `;
+                return;
+            }
+
+            eventsGrid.innerHTML = events.map(event => `
+                <div class="event-card">
+                    <div class="event-header">
+                        <span class="event-date">${formatDate(event.date)}</span>
+                        <span class="event-time">${event.time || 'Sem horário'}</span>
+                    </div>
+                    <h3 class="event-title">${event.title}</h3>
+                    <p class="event-description">${event.description || 'Sem descrição'}</p>
+                    <div class="event-actions">
+                        <button class="event-btn btn-delete" onclick="deleteEvent(${event.id})">
+                            <i class="fas fa-trash"></i> Deletar
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Load events on page load
+        loadEvents();
+    </script>
+</body>
+</html>

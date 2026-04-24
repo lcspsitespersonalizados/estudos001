@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inglês - Site de Estudos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+
+        * {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0d0d0d;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .logo {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 28px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 70px;
+            width: 250px;
+            height: calc(100vh - 70px);
+            background: transparent;
+            box-shadow: none;
+            padding: 20px 0;
+            overflow-y: auto;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            gap: 15px;
+        }
+
+        .sidebar-menu a:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 0 25px 25px 0;
+            margin-right: 15px;
+        }
+
+        .hidden-subjects {
+            display: none;
+        }
+
+        .show-more-btn {
+            margin: 10px 25px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .show-more-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .main-content {
+            margin-left: 250px;
+            margin-top: 70px;
+            padding: 40px;
+            flex: 1;
+        }
+
+        .subject-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .subject-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .subject-title {
+            color: white;
+            font-size: 36px;
+        }
+
+        .content-section {
+            background: #1a1a1a;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-title {
+            color: #667eea;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .section-content {
+            color: #e0e0e0;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        .topic-list {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .topic-list li {
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .topic-list li:hover {
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateX(5px);
+        }
+
+        .topic-list li i {
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-graduation-cap"></i>
+            <span>Zona de Sobrevivencia</span>
+        </div>
+        <div class="header-right">
+            <button class="back-btn" onclick="history.back()">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </button>
+        </div>
+    </header>
+
+    <aside class="sidebar">
+        <ul class="sidebar-menu">
+            <li><a href="index.html"><i class="fas fa-home"></i> Início</a></li>
+            <li><a href="anexos.html?materia=ingles"><i class="fas fa-paperclip"></i> Anexos</a></li>
+            <li><a href="tarefas-realizadas.html?materia=ingles"><i class="fas fa-check-circle"></i> Tarefas Realizadas</a></li>
+            <li><a href="agenda.html?materia=ingles"><i class="fas fa-calendar-alt"></i> Agenda</a></li>
+            <button class="show-more-btn" id="showMoreBtn" onclick="toggleSubjects()">
+                <i class="fas fa-chevron-down"></i> Ver matérias
+            </button>
+            <div class="hidden-subjects" id="hiddenSubjects">
+                <li><a href="arte.html"><i class="fas fa-palette"></i> Arte</a></li>
+                <li><a href="biologia.html"><i class="fas fa-dna"></i> Biologia</a></li>
+                <li><a href="educacao-fisica.html"><i class="fas fa-running"></i> Educação Física</a></li>
+                <li><a href="fisica.html"><i class="fas fa-atom"></i> Física</a></li>
+                <li><a href="filosofia.html"><i class="fas fa-brain"></i> Filosofia</a></li>
+                <li><a href="geografia.html"><i class="fas fa-globe"></i> Geografia</a></li>
+                <li><a href="historia.html"><i class="fas fa-landmark"></i> História</a></li>
+                <li><a href="portugues.html"><i class="fas fa-book"></i> Língua Portuguesa</a></li>
+                <li><a href="matematica.html"><i class="fas fa-calculator"></i> Matemática</a></li>
+                <li><a href="quimica.html"><i class="fas fa-flask"></i> Química</a></li>
+                <li><a href="sociologia.html"><i class="fas fa-users"></i> Sociologia</a></li>
+            </div>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <div class="subject-header">
+            <div class="subject-icon">
+                <i class="fas fa-language"></i>
+            </div>
+            <h1 class="subject-title">Inglês</h1>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">Sobre a Matéria</h2>
+            <p class="section-content">
+                O Inglês é a língua mais falada no mundo e é essencial para comunicação global, negócios, ciência e tecnologia. Dominar o inglês abre portas para oportunidades internacionais e acesso a vasto conteúdo educacional e cultural.
+            </p>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">Tópicos Principais</h2>
+            <ul class="topic-list">
+                <li><i class="fas fa-check-circle"></i> Gramática</li>
+                <li><i class="fas fa-check-circle"></i> Vocabulário</li>
+                <li><i class="fas fa-check-circle"></i> Compreensão Oral</li>
+                <li><i class="fas fa-check-circle"></i> Expressão Oral</li>
+                <li><i class="fas fa-check-circle"></i> Leitura</li>
+                <li><i class="fas fa-check-circle"></i> Escrita</li>
+                <li><i class="fas fa-check-circle"></i> Pronúncia</li>
+                <li><i class="fas fa-check-circle"></i> Conversação</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">Por que estudar Inglês?</h2>
+            <p class="section-content">
+                O inglês é a língua franca da comunicação internacional. Estudá-lo permite acessar informações, cultura e oportunidades de trabalho em todo o mundo. É fundamental para carreiras em tecnologia, ciência, negócios e turismo.
+            </p>
+        </div>
+    </main>
+
+    <script>
+        function toggleSubjects() {
+            const hiddenSubjects = document.getElementById('hiddenSubjects');
+            const showMoreBtn = document.getElementById('showMoreBtn');
+            
+            if (hiddenSubjects.style.display === 'none' || hiddenSubjects.style.display === '') {
+                hiddenSubjects.style.display = 'block';
+                showMoreBtn.innerHTML = '<i class="fas fa-chevron-up"></i> Ver menos';
+            } else {
+                hiddenSubjects.style.display = 'none';
+                showMoreBtn.innerHTML = '<i class="fas fa-chevron-down"></i> Ver matérias';
+            }
+        }
+    </script>
+</body>
+</html>
